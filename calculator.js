@@ -42,6 +42,7 @@ document.getElementById('amountPaid').addEventListener('input', calculateCredit)
 document.getElementById('programEndDate').addEventListener('input', calculateCredit);
 document.getElementById('currentProgramLength').addEventListener('input', calculateCredit);
 document.getElementById('programLength').addEventListener('input', calculateTotalProgramValue);
+document.getElementById('dateFrom').addEventListener('input', calculateCredit);
 document.getElementById('baseMonthlyPayment').addEventListener('input', calculateTotalProgramValue);
 document.getElementById('baseDownPayment').addEventListener('input', calculateTotalProgramValue);
 
@@ -114,6 +115,7 @@ function calculateCredit() {
     const programEndDateInput = document.getElementById('programEndDate').value.trim();
     const currentProgramLengthInput = document.getElementById('currentProgramLength').value.trim();
     const programLength = parseFloat(document.getElementById('programLength').value);
+    const dateFromInput = document.getElementById('dateFrom').value.trim(); // Get dateFrom input
 
     let creditAmount = amountPaid; // Default to amountPaid
     let timeLeftInMonths = 0;
@@ -121,6 +123,7 @@ function calculateCredit() {
 
     if (programEndDateInput !== '') {
         const programEndDate = new Date(programEndDateInput);
+        const currentDate = dateFromInput ? new Date(dateFromInput) : new Date(); // Use dateFrom or current date
         const currentDate = new Date();
         const timeLeftInMilliseconds = programEndDate - currentDate;
         timeLeftInDays = Math.ceil(timeLeftInMilliseconds / (1000 * 60 * 60 * 24));
