@@ -124,7 +124,7 @@ function calculateCredit() {
     if (programEndDateInput !== '') {
         const programEndDate = new Date(programEndDateInput);
         const currentDate = dateFromInput ? new Date(dateFromInput) : new Date(); // Use dateFrom or current date
-        const currentDate = new Date();
+
         const timeLeftInMilliseconds = programEndDate - currentDate;
         timeLeftInDays = Math.ceil(timeLeftInMilliseconds / (1000 * 60 * 60 * 24));
         timeLeftInMonths = timeLeftInDays / 30.44; // An average month is approximately 30.44 days
