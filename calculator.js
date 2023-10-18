@@ -83,11 +83,30 @@ function toggleCalculatorDisplay() {
     }
 }
 
+const sliderSwitch = document.getElementById('sliderSwitch')
+const calculatorInput = document.getElementById('calculatorInput')
+const calculatorSlider = document.getElementById('calculatorSlider')
+
+// function to toggle pricing slider
+function toggleSliderDisplay() {
+    if(sliderSwitch.checked) {
+        //slider mode enabled
+        calculatorInput.style.display = "none";
+        calculatorSlider.style.display = "block";
+    } else {
+        // input mode enabled
+        calculatorInput.style.display = "block";
+        calculatorSlider.style.display = "none";
+    }
+}
+
 // Add event listener for the mode switch
 modeSwitch.addEventListener('change', toggleCalculatorDisplay);
+sliderSwitch.addEventListener("change",toggleSliderDisplay);
 
 // Call the toggle function initially to set the correct display
 toggleCalculatorDisplay();
+toggleSliderDisplay();
 
 
 function calculateCredit() {
@@ -325,3 +344,60 @@ function calculateOption4() {
         option4ResultSpan.textContent = '';
     }
 }
+//-----------------------------------------------------------------------------------------------------
+
+const sliderValue = document.getElementById('sliderValue');
+const incrementButton = document.getElementById('increment');
+const decrementButton = document.getElementById('decrement');
+const slider = document.getElementById('slider');
+const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
+
+// Set the slider's minimum and maximum values
+slider.min = 0;
+slider.max = baseMonthlyPayment;
+
+// Function to update the text input when the slider changes
+function updateTextInput() {
+    sliderValue.value = slider.value;
+}
+
+// Function to update the slider when the text input changes
+function updateSlider() {
+    const value = parseInt(sliderValue.value);
+    if (value >= 0 && value <= baseMonthlyPayment) {
+        slider.value = value;
+    }
+}
+
+// Function to handle changes in the slider value
+function handleSliderChange() {
+    updateTextInput();
+}
+
+// Add event listeners
+slider.addEventListener('input', handleSliderChange);
+incrementButton.addEventListener('click', () => {
+    const newValue = parseInt(slider.value) + 1;
+    if (newValue <= baseMonthlyPayment) {
+        slider.value = newValue;
+        updateTextInput();
+    }
+});
+
+decrementButton.addEventListener('click', () => {
+    const newValue = parseInt(slider.value) - 1;
+    if (newValue >= 0) {
+        slider.value = newValue;
+        updateTextInput();
+    }
+});
+
+sliderValue.addEventListener('change', updateSlider);
+
+// Initial setup
+handleSliderChange();
+
+
+
+
+
