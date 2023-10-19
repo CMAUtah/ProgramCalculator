@@ -348,27 +348,83 @@ function calculateOption4() {
     }
 }
 //-----------------------------------------------------------------------------------------------------
-
 const sliderValue = document.getElementById('sliderValue');
 const incrementButton = document.getElementById('increment');
 const decrementButton = document.getElementById('decrement');
 const slider = document.getElementById('slider');
 const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
+const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
+const programLength = parseFloat(document.getElementById('programLength').value);
+const discountValueA = parseFloat(document.getElementById('discountValueA').value);
+const discountValueB = parseFloat(document.getElementById('discountValueB').value);
+const discountValueC = parseFloat(document.getElementById('discountValueC').value);
+const discountValueD = parseFloat(document.getElementById('discountValueD').value);
+const downPaymentD = parseFloat(document.getElementById('downPaymentD').value);
+const downPaymentC = parseFloat(document.getElementById('downPaymentC').value);
+const downPaymentB = parseFloat(document.getElementById('downPaymentB').value);
+const totalValueBeforeDiscount = (baseMonthlyPayment * programLength) + baseDownPayment;
+
+// Calculate dValue and cValue based on provided variables, make sure downPaymentD and downPaymentC are defined
+const dValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100)) - downPaymentD) / programLength;
+const cValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100)) - downPaymentC) / programLength;
+const bValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)) - downPaymentB) / programLength;
+const aValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
 
 // Set the slider's minimum and maximum values
 slider.min = 0;
 slider.max = baseMonthlyPayment;
 
+
+function calculateSliderDown(sliderValue) {
+    let downpayment;
+    
+    // Calculate program value based on sliderValue
+    let programValue;
+    if (sliderValue > cValue) {
+        programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100));
+    } else if (sliderValue > bValue) {
+        programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100));
+    } else if (sliderValue > 1) {
+        programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100));
+    } else if (sliderValue == 0) {
+        programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
+    }
+
+    // Calculate down payment based on program value and discount levels
+    if (sliderValue > cValue) {
+        downpayment = -1 * (dValue * programLength - programValue);
+    } else if (sliderValue > bValue) {
+        downpayment = -1 * (cValue * programLength - programValue);
+    } else if (sliderValue > 1) {
+        downpayment = -1 * (bValue * programLength - programValue);
+    } else if (sliderValue == 0) {
+        downpayment = aValue;
+    }
+
+    return downpayment; // Return the calculated down payment
+}
+
+
 // Function to update the text input when the slider changes
 function updateTextInput() {
     sliderValue.value = slider.value;
+
+    // Calculate down payment, monthly payment, and discount values
+    const downpayment = calculateSliderDown(slider.value); // Call the calculateSliderDown function
+    const monthlyPayment = parseFloat(slider.value);
+
+    // Update the displayed values in your HTML
+    document.getElementById('downpaymentDisplay').textContent = `$${downpayment.toFixed(2)}`;
+    document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
 }
+
 
 // Function to update the slider when the text input changes
 function updateSlider() {
     const value = parseInt(sliderValue.value);
     if (value >= 0 && value <= baseMonthlyPayment) {
         slider.value = value;
+        updateTextInput();
     }
 }
 
@@ -399,7 +455,6 @@ sliderValue.addEventListener('change', updateSlider);
 
 // Initial setup
 handleSliderChange();
-
 
 
 
