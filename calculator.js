@@ -392,11 +392,11 @@ function calculateSliderDown(sliderValue) {
 
     // Calculate down payment based on program value and discount levels
     if (sliderValue > cValue) {
-        downpayment = -1 * (dValue * programLength - programValue);
+        downpayment = -1 * (sliderValue * programLength - programValue);
     } else if (sliderValue > bValue) {
-        downpayment = -1 * (cValue * programLength - programValue);
+        downpayment = -1 * (sliderValue * programLength - programValue);
     } else if (sliderValue > 1) {
-        downpayment = -1 * (bValue * programLength - programValue);
+        downpayment = -1 * (sliderValue * programLength - programValue);
     } else if (sliderValue == 0) {
         downpayment = aValue;
     }
@@ -404,6 +404,19 @@ function calculateSliderDown(sliderValue) {
     return downpayment; // Return the calculated down payment
 }
 
+function displayDiscount(sliderValue){
+    let discountValue;
+    if (sliderValue > cValue) {
+        discountValue = discountValueD;
+    } else if (sliderValue > bValue) {
+        discountValue = discountValueC;
+    } else if (sliderValue > 1) {
+        discountValue = discountValueB;
+    } else if (sliderValue == 0) {
+        discountValue = discountValueA;
+    }
+    return discountValue
+}
 
 // Function to update the text input when the slider changes
 function updateTextInput() {
@@ -412,10 +425,12 @@ function updateTextInput() {
     // Calculate down payment, monthly payment, and discount values
     const downpayment = calculateSliderDown(slider.value); // Call the calculateSliderDown function
     const monthlyPayment = parseFloat(slider.value);
+    const discountValue = displayDiscount(slider.value);
 
     // Update the displayed values in your HTML
     document.getElementById('downpaymentDisplay').textContent = `$${downpayment.toFixed(2)}`;
     document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
+    document.getElementById('discountDisplay').textContent = `%${discountValue}`;
 }
 
 
@@ -455,7 +470,3 @@ sliderValue.addEventListener('change', updateSlider);
 
 // Initial setup
 handleSliderChange();
-
-
-
-
