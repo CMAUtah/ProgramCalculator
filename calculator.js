@@ -373,6 +373,7 @@ const dValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discount
 const cValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100)) - downPaymentC) / programLength;
 const bValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)) - downPaymentB) / programLength;
 const aValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
+const aThreshold = ((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)))-aValue)/programLength;
 
 sliderCreditElement.addEventListener('input', updateTextInput);
 
@@ -389,8 +390,8 @@ const monthlySliderCreditLow = getSliderCredit();
 
 
 // Set the slider's minimum and maximum values
-slider.min = 0 + monthlySliderCreditLow;
-slider.max = baseMonthlyPayment;
+slider.min = 0 + aThreshold-.01;
+slider.max = baseMonthlyPayment - monthlySliderCreditLow;
 
 
 
@@ -404,9 +405,9 @@ function calculateSliderDown(sliderValue) {
         programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100));
     } else if (sliderValue > bValue) {
         programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100));
-    } else if (sliderValue > 0) {
+    } else if (sliderValue > aThreshold) {
         programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100));
-    } else if (sliderValue == 0) {
+    } else if (sliderValue >= slider.min) {
         programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
     }
 
@@ -415,9 +416,9 @@ function calculateSliderDown(sliderValue) {
         downpayment = -1 * (sliderValue * programLength - programValue);
     } else if (sliderValue > bValue) {
         downpayment = -1 * (sliderValue * programLength - programValue);
-    } else if (sliderValue > 1) {
+    } else if (sliderValue > aThreshold) {
         downpayment = -1 * (sliderValue * programLength - programValue);
-    } else if (sliderValue == 0) {
+    } else if (sliderValue >= slider.min) {
         downpayment = aValue;
     }
 
@@ -430,35 +431,42 @@ function displayDiscount(sliderValue){
         discountValue = discountValueD;
     } else if (sliderValue > bValue) {
         discountValue = discountValueC;
-    } else if (sliderValue > 1) {
+    } else if (sliderValue > aThreshold) {
         discountValue = discountValueB;
-    } else if (sliderValue == 0) {
+    } else if (sliderValue >= 0) {
         discountValue = discountValueA;
     }
     return discountValue
+}
+
+function monthlyThreshold(monthlyThresh){
+    let value;
+    if(monthlyThresh <= aThreshold){
+        value = 0.00;
+    } else{
+        value = monthlyThresh;
+    }
+    return value;
 }
 
 function updateTextInput() {
     // Use parseFloat to capture decimal values
     const sliderValueFloat = parseFloat(slider.value).toFixed(2); // Capture the value as a float with two decimal places
     sliderValue.value = sliderValueFloat; // Update the input field with the captured value
+    let monthlyThresh = parseFloat(sliderValueFloat);
 
-    // Check if the slider is at its far-left position (minimum value)
-    if (slider.value === slider.min) {
-        document.getElementById('monthlyPaymentDisplay').textContent = '$0.00';
-    } else {
-        // Calculate down payment, monthly payment, and discount values
-        const sliderMonthlyCredit = getSliderCredit();
-        const monthlyPayment = parseFloat(sliderValueFloat) - sliderMonthlyCredit;
-        const downpayment = calculateSliderDown(sliderValueFloat);
-        const discountValue = displayDiscount(parseFloat(sliderValueFloat));
+    // Calculate down payment, monthly payment, and discount values
+    const sliderMonthlyCredit = getSliderCredit();
+    const monthlyPayment = monthlyThreshold(monthlyThresh) - sliderMonthlyCredit;
+    const downpayment = calculateSliderDown(sliderValueFloat);
+    const discountValue = displayDiscount(parseFloat(sliderValueFloat));
 
-        // Update the displayed values in your HTML
-        document.getElementById('sliderMonthlyCredit').textContent = `$${sliderMonthlyCredit.toFixed(2)}`;
-        document.getElementById('downpaymentDisplay').textContent = `$${downpayment.toFixed(2)}`;
-        document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
-        document.getElementById('discountDisplay').textContent = `%${discountValue}`;
-    }
+    // Update the displayed values in your HTML
+    document.getElementById('sliderMonthlyCredit').textContent = `$${sliderMonthlyCredit.toFixed(2)}`;
+    document.getElementById('downpaymentDisplay').textContent = `$${downpayment.toFixed(2)}`;
+    document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
+    document.getElementById('discountDisplay').textContent = `%${discountValue}`;
+
 }
 
 
@@ -500,7 +508,6 @@ sliderValue.addEventListener('change', updateSlider);
 
 // Initial setup
 handleSliderChange();
-
 
 
 
