@@ -103,6 +103,9 @@
     </div>
     <div id="calculatorSlider">
         <div id="sliderValueDisplay">
+            <label for="sliderCredit">Credit: <input type="text" id="sliderCredit" value="0"></label>
+            <p style="margin-top: 5px;">Monthly Credit: <span id="sliderMonthlyCredit"></span></p>
+            <br>
             <p>Downpayment: <span id="downpaymentDisplay">$0</span></p>
             <p>Monthly Payment: <span id="monthlyPaymentDisplay">$</span></p>
             <p>Discount: <span id="discountDisplay">0%</span></p>
@@ -110,11 +113,13 @@
         <div id="sliderInput">
             <div id="valueControls">
                 <button id="decrement">-</button>
-                <input type="text" id="sliderValue" min="0" step="1" value="0">
+                <input type="text" id="sliderValue" min="0" step=".01" value="0">
                 <button id="increment">+</button>
             </div>
-            <input type="range" id="slider" min="0" max="999">
+            <input type="range" id="slider" min="0" step=".01" max="999">
         </div>
+        <br>
+        <div id="horizontal-line"></div>
     </div>
     
     <script src="calculator.js"></script>
