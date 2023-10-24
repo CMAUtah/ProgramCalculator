@@ -144,6 +144,7 @@ function calculateCredit() {
     // Update the monthly credit and credit amount with the calculated values
     document.getElementById('monthlyCredit').textContent = monthlyCredit.toFixed(2);
     document.getElementById('creditAmount').textContent = creditAmount.toFixed(2);
+    return creditAmount;
 }
 
 
@@ -363,6 +364,9 @@ const downPaymentD = parseFloat(document.getElementById('downPaymentD').value);
 const downPaymentC = parseFloat(document.getElementById('downPaymentC').value);
 const downPaymentB = parseFloat(document.getElementById('downPaymentB').value);
 const totalValueBeforeDiscount = (baseMonthlyPayment * programLength) + baseDownPayment;
+const sliderCreditElement = document.getElementById('sliderCredit');
+
+
 
 // Calculate dValue and cValue based on provided variables, make sure downPaymentD and downPaymentC are defined
 const dValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100)) - downPaymentD) / programLength;
@@ -370,12 +374,28 @@ const cValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discount
 const bValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)) - downPaymentB) / programLength;
 const aValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
 
+sliderCreditElement.addEventListener('input', updateTextInput);
+
+function getSliderCredit(){
+    let sliderCredit = parseFloat(sliderCreditElement.value);
+    if(isNaN(sliderCredit)){
+        sliderCredit = 0
+    }
+    const monthlySliderCredit = sliderCredit/programLength;
+    return monthlySliderCredit;
+}
+const monthlySliderCreditLow = getSliderCredit();
+
+
+
 // Set the slider's minimum and maximum values
-slider.min = 0;
+slider.min = 0 + monthlySliderCreditLow;
 slider.max = baseMonthlyPayment;
 
 
+
 function calculateSliderDown(sliderValue) {
+
     let downpayment;
     
     // Calculate program value based on sliderValue
@@ -384,7 +404,7 @@ function calculateSliderDown(sliderValue) {
         programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100));
     } else if (sliderValue > bValue) {
         programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100));
-    } else if (sliderValue > 1) {
+    } else if (sliderValue > 0) {
         programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100));
     } else if (sliderValue == 0) {
         programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
@@ -418,20 +438,30 @@ function displayDiscount(sliderValue){
     return discountValue
 }
 
-// Function to update the text input when the slider changes
 function updateTextInput() {
-    sliderValue.value = slider.value;
+    // Use parseFloat to capture decimal values
+    const sliderValueFloat = parseFloat(slider.value).toFixed(2); // Capture the value as a float with two decimal places
+    sliderValue.value = sliderValueFloat; // Update the input field with the captured value
 
-    // Calculate down payment, monthly payment, and discount values
-    const downpayment = calculateSliderDown(slider.value); // Call the calculateSliderDown function
-    const monthlyPayment = parseFloat(slider.value);
-    const discountValue = displayDiscount(slider.value);
+    // Check if the slider is at its far-left position (minimum value)
+    if (slider.value === slider.min) {
+        document.getElementById('monthlyPaymentDisplay').textContent = '$0.00';
+    } else {
+        // Calculate down payment, monthly payment, and discount values
+        const sliderMonthlyCredit = getSliderCredit();
+        const monthlyPayment = parseFloat(sliderValueFloat) - sliderMonthlyCredit;
+        const downpayment = calculateSliderDown(sliderValueFloat);
+        const discountValue = displayDiscount(parseFloat(sliderValueFloat));
 
-    // Update the displayed values in your HTML
-    document.getElementById('downpaymentDisplay').textContent = `$${downpayment.toFixed(2)}`;
-    document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
-    document.getElementById('discountDisplay').textContent = `%${discountValue}`;
+        // Update the displayed values in your HTML
+        document.getElementById('sliderMonthlyCredit').textContent = `$${sliderMonthlyCredit.toFixed(2)}`;
+        document.getElementById('downpaymentDisplay').textContent = `$${downpayment.toFixed(2)}`;
+        document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
+        document.getElementById('discountDisplay').textContent = `%${discountValue}`;
+    }
 }
+
+
 
 
 // Function to update the slider when the text input changes
