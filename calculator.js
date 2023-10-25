@@ -373,7 +373,7 @@ const dValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discount
 const cValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100)) - downPaymentC) / programLength;
 const bValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)) - downPaymentB) / programLength;
 const aValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
-const aThreshold = ((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)))-aValue)/programLength;
+const aThreshold = (((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)))-aValue)/programLength).toFixed(3);
 
 sliderCreditElement.addEventListener('input', updateTextInput);
 
@@ -514,6 +514,5 @@ sliderValue.addEventListener('change', updateSlider);
 
 // Initial setup
 handleSliderChange();
-
 
 
