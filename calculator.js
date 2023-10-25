@@ -390,8 +390,8 @@ const monthlySliderCreditLow = getSliderCredit();
 
 
 // Set the slider's minimum and maximum values
-slider.min = 0 + aThreshold-.01;
-slider.max = baseMonthlyPayment - monthlySliderCreditLow;
+slider.min = 0 + (aThreshold -.01);
+slider.max = baseMonthlyPayment;
 
 
 
@@ -457,9 +457,15 @@ function updateTextInput() {
 
     // Calculate down payment, monthly payment, and discount values
     const sliderMonthlyCredit = getSliderCredit();
-    const monthlyPayment = monthlyThreshold(monthlyThresh) - sliderMonthlyCredit;
-    const downpayment = calculateSliderDown(sliderValueFloat);
+    let monthlyPayment = monthlyThreshold(monthlyThresh);
+    let downpayment = calculateSliderDown(sliderValueFloat);
     const discountValue = displayDiscount(parseFloat(sliderValueFloat));
+    if(monthlyPayment == 0.00){
+        downpayment -= sliderMonthlyCredit;
+    } else if(monthlyPayment > 0.00){
+        monthlyPayment -= sliderMonthlyCredit;
+    }
+
 
     // Update the displayed values in your HTML
     document.getElementById('sliderMonthlyCredit').textContent = `$${sliderMonthlyCredit.toFixed(2)}`;
