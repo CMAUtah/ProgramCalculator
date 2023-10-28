@@ -349,10 +349,12 @@ function calculateOption4() {
     }
 }
 //-----------------------------------------------------------------------------------------------------
-const sliderValue = document.getElementById('sliderValue');
-const incrementButton = document.getElementById('increment');
-const decrementButton = document.getElementById('decrement');
-const slider = document.getElementById('slider');
+
+// Get the necessary elements by their IDs
+const decrementButton = document.getElementById("decrement");
+const incrementButton = document.getElementById("increment");
+const sliderValueInput = document.getElementById("sliderValue");
+const sliderInput = document.getElementById("slider");
 const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
 const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
 const programLength = parseFloat(document.getElementById('programLength').value);
@@ -360,159 +362,148 @@ const discountValueA = parseFloat(document.getElementById('discountValueA').valu
 const discountValueB = parseFloat(document.getElementById('discountValueB').value);
 const discountValueC = parseFloat(document.getElementById('discountValueC').value);
 const discountValueD = parseFloat(document.getElementById('discountValueD').value);
-const downPaymentD = parseFloat(document.getElementById('downPaymentD').value);
-const downPaymentC = parseFloat(document.getElementById('downPaymentC').value);
 const downPaymentB = parseFloat(document.getElementById('downPaymentB').value);
+const downPaymentC = parseFloat(document.getElementById('downPaymentC').value);
+const downPaymentD = parseFloat(document.getElementById('downPaymentD').value);
 const totalValueBeforeDiscount = (baseMonthlyPayment * programLength) + baseDownPayment;
-const sliderCreditElement = document.getElementById('sliderCredit');
 
-
+let sliderCredit = document.getElementById("sliderCredit");
 
 // Calculate dValue and cValue based on provided variables, make sure downPaymentD and downPaymentC are defined
 const dValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100)) - downPaymentD) / programLength;
-const cValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100)) - downPaymentC) / programLength;
-const bValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)) - downPaymentB) / programLength;
-const aValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
+const cValue = Math.round(((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100)) - downPaymentC) / programLength)*100)/100;
+const bValue = Math.round(((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)) - downPaymentB) / programLength)*100)/100;
+const aValue = Math.round((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100)))*100)/100;
 const aThreshold = (((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)))-aValue)/programLength).toFixed(3);
 
-sliderCreditElement.addEventListener('input', updateTextInput);
 
-function getSliderCredit(){
-    let sliderCredit = parseFloat(sliderCreditElement.value);
-    if(isNaN(sliderCredit)){
-        sliderCredit = 0
-    }
-    const monthlySliderCredit = sliderCredit/programLength;
-    return monthlySliderCredit;
+const sliderMin = aThreshold;
+const sliderMax = baseMonthlyPayment;
+
+sliderInput.min = sliderMin;
+sliderInput.max = sliderMax;
+
+// Function to update the slider value and input field
+function updateSliderValue(increment) {
+  let currentValue = parseFloat(sliderValueInput.value);
+  const step = parseFloat(sliderValueInput.step);
+
+  // Calculate the new value
+  currentValue = Math.round(currentValue + increment);
+
+  // Ensure the value is within the defined range
+  if (currentValue < parseFloat(sliderInput.min)) {
+    currentValue = parseFloat(sliderInput.min);
+  } else if (currentValue > parseFloat(sliderInput.max)) {
+    currentValue = parseFloat(sliderInput.max);
+  }
+
+  // Update the input field and slider position with two decimal places
+  sliderValueInput.value = currentValue.toFixed(2);
+  sliderInput.value = currentValue.toFixed(2);
+  updateDisplay(currentValue);
 }
-const monthlySliderCreditLow = getSliderCredit();
 
 
+function updateDisplay(currentValue) {
+  let monthlyPayment = calculateMonthlyPayment(currentValue);
+  let discountDisplay = calculateDiscountValue(monthlyPayment);
+  const sliderDown = calculateSliderDown(monthlyPayment);
+  let sliderMonthlyCredit = calculateSliderMonthlyCredit();
 
-// Set the slider's minimum and maximum values
-slider.min = 0 + (aThreshold -.01);
-slider.max = baseMonthlyPayment;
+  if(monthlyPayment == aThreshold){
+    sliderDown -= sliderMonthlyCredit;
+} else if(monthlyPayment > aThreshold){
+    monthlyPayment -= sliderMonthlyCredit;
+}
+  document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
+  document.getElementById('discountDisplay').textContent = `%${discountDisplay}`;
+  document.getElementById('downpaymentDisplay').textContent = `$${sliderDown.toFixed(2)}`;
+  document.getElementById('sliderMonthlyCredit').textContent = `$${sliderMonthlyCredit.toFixed(2)}`;
+}
 
+// Add event listeners for the decrement and increment buttons
+decrementButton.addEventListener("click", () => {
+  updateSliderValue(-1);
+});
 
+incrementButton.addEventListener("click", () => {
+  updateSliderValue(1);
+});
 
-function calculateSliderDown(sliderValue) {
+// Add an event listener to update the input field when the slider is changed
+sliderInput.addEventListener("input", () => {
+  sliderValueInput.value = parseFloat(sliderInput.value).toFixed(2);
+  updateDisplay(parseFloat(sliderInput.value));
+});
 
-    let downpayment;
+sliderValueInput.addEventListener("change", () => {
+    // This event can be used if you prefer to update the slider after you finish typing.
+    // It triggers when you move focus out of the input box.
     
-    // Calculate program value based on sliderValue
-    let programValue;
-    if (sliderValue > cValue) {
-        programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100));
-    } else if (sliderValue > bValue) {
-        programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100));
-    } else if (sliderValue > aThreshold) {
-        programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100));
-    } else if (sliderValue >= slider.min) {
-        programValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueA / 100));
-    }
+    // Parse the input value and update the slider and display
+    const newValue = parseFloat(sliderValueInput.value);
+    sliderInput.value = newValue.toFixed(2);
+    updateDisplay(newValue);
+});
 
-    // Calculate down payment based on program value and discount levels
-    if (sliderValue > cValue) {
-        downpayment = -1 * (sliderValue * programLength - programValue);
-    } else if (sliderValue > bValue) {
-        downpayment = -1 * (sliderValue * programLength - programValue);
-    } else if (sliderValue > aThreshold) {
-        downpayment = -1 * (sliderValue * programLength - programValue);
-    } else if (sliderValue >= slider.min) {
-        downpayment = aValue;
-    }
+sliderCredit.addEventListener('input', () => {
+    updateDisplay();
+});
 
-    return downpayment; // Return the calculated down payment
+// Initialize the input field with the initial value
+sliderValueInput.value = parseFloat(sliderInput.value).toFixed(2);
+
+
+function calculateMonthlyPayment(value) {
+  return value;
 }
 
-function displayDiscount(sliderValue){
+function calculateDiscountValue(value){
     let discountValue;
-    if (sliderValue > cValue) {
+    if (value > cValue) {
         discountValue = discountValueD;
-    } else if (sliderValue > bValue) {
+    } else if (value > bValue) {
         discountValue = discountValueC;
-    } else if (sliderValue > aThreshold) {
+    } else if (value > aThreshold) {
         discountValue = discountValueB;
-    } else if (sliderValue >= 0) {
+    } else if (value >= 0) {
         discountValue = discountValueA;
     }
     return discountValue
 }
 
-function monthlyThreshold(monthlyThresh){
-    let value;
-    if(monthlyThresh <= aThreshold){
-        value = 0.00;
-    } else{
-        value = monthlyThresh;
+function calculateSliderDown(value) {
+
+    let downpayment;
+    
+    // Calculate program value based on sliderValue
+    let programValue;
+    if (value > cValue) {
+        programValue = totalValueBeforeDiscount * (1-(discountValueD / 100));
+    } else if (value > bValue) {
+        programValue = totalValueBeforeDiscount * (1-(discountValueC / 100));
+    } else if (value > aThreshold) {
+        programValue = totalValueBeforeDiscount * (1-(discountValueB / 100));
+    } else if (value >= slider.min) {
+        programValue = totalValueBeforeDiscount * (1-(discountValueA / 100));
     }
-    return value;
+    programValue = Math.round(programValue * 100) / 100;
+
+    if (value > cValue) {
+        downpayment = -1 * (value * programLength - programValue);
+    } else if (value > bValue) {
+        downpayment = -1 * (value * programLength - programValue);
+    } else if (value > aThreshold) {
+        downpayment = -1 * (value * programLength - programValue);
+    } else if (value >= sliderInput.min) {
+        downpayment = aValue;
+    }
+
+    return downpayment; 
 }
 
-function updateTextInput() {
-    // Use parseFloat to capture decimal values
-    const sliderValueFloat = parseFloat(slider.value).toFixed(2); // Capture the value as a float with two decimal places
-    sliderValue.value = sliderValueFloat; // Update the input field with the captured value
-    let monthlyThresh = parseFloat(sliderValueFloat);
-
-    // Calculate down payment, monthly payment, and discount values
-    const sliderMonthlyCredit = getSliderCredit();
-    let monthlyPayment = monthlyThreshold(monthlyThresh);
-    let downpayment = calculateSliderDown(sliderValueFloat);
-    const discountValue = displayDiscount(parseFloat(sliderValueFloat));
-    if(monthlyPayment == 0.00){
-        downpayment -= sliderMonthlyCredit;
-    } else if(monthlyPayment > 0.00){
-        monthlyPayment -= sliderMonthlyCredit;
-    }
-
-
-    // Update the displayed values in your HTML
-    document.getElementById('sliderMonthlyCredit').textContent = `$${sliderMonthlyCredit.toFixed(2)}`;
-    document.getElementById('downpaymentDisplay').textContent = `$${downpayment.toFixed(2)}`;
-    document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
-    document.getElementById('discountDisplay').textContent = `%${discountValue}`;
-
+function calculateSliderMonthlyCredit(){
+    const monthlyValue = sliderCredit.value/programLength;
+    return monthlyValue
 }
-
-
-
-
-// Function to update the slider when the text input changes
-function updateSlider() {
-    const value = parseInt(sliderValue.value);
-    if (value >= 0 && value <= baseMonthlyPayment) {
-        slider.value = value;
-        updateTextInput();
-    }
-}
-
-// Function to handle changes in the slider value
-function handleSliderChange() {
-    updateTextInput();
-}
-
-// Add event listeners
-slider.addEventListener('input', handleSliderChange);
-incrementButton.addEventListener('click', () => {
-    const newValue = parseInt(slider.value) + 1;
-    if (newValue <= baseMonthlyPayment) {
-        slider.value = newValue;
-        updateTextInput();
-    }
-});
-
-decrementButton.addEventListener('click', () => {
-    const newValue = parseInt(slider.value) - 1;
-    if (newValue >= 0) {
-        slider.value = newValue;
-        updateTextInput();
-    }
-});
-
-sliderValue.addEventListener('change', updateSlider);
-
-// Initial setup
-handleSliderChange();
-
-
