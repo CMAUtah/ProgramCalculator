@@ -263,6 +263,7 @@ span {
     text-align: center;
     line-height: 24px;
     cursor: help;
+    position: relative; /* Added for Chrome compatibility */
 }
 
 /* Style for the tooltip text */
