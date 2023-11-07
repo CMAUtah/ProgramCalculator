@@ -478,34 +478,43 @@ function calculateDiscountValue(value){
     return discountValue
 }
 
+
 function calculateSliderDown(value) {
 
-    let downpayment;
     
-    // Calculate program value based on sliderValue
-    let programValue;
-    if (value > cValue) {
-        programValue = totalValueBeforeDiscount * (1-(discountValueD / 100));
-    } else if (value > bValue) {
-        programValue = totalValueBeforeDiscount * (1-(discountValueC / 100));
-    } else if (value > aThreshold) {
-        programValue = totalValueBeforeDiscount * (1-(discountValueB / 100));
-    } else if (value >= slider.min) {
-        programValue = totalValueBeforeDiscount * (1-(discountValueA / 100));
-    }
-    //programValue = Math.round(programValue * 100) / 100;
+    let downpayment;
+    if (value == 0) {
+        return aValue;
+    } else {
 
-    if (value > cValue) {
-        downpayment = -1 * (value * programLength - programValue);
-    } else if (value > bValue) {
-        downpayment = -1 * (value * programLength - programValue);
-    } else if (value > aThreshold) {
-        downpayment = -1 * (value * programLength - programValue);
-    } else if (value >= sliderInput.min) {
-        downpayment = aValue;
-    }
+        // Calculate program value based on sliderValue
+        let programValue;
+        if (value > cValue) {
+            programValue = totalValueBeforeDiscount * (1-(discountValueD / 100));
+        } else if (value > bValue) {
+            programValue = totalValueBeforeDiscount * (1-(discountValueC / 100));
+        } else if (value > aThreshold) {
+            programValue = totalValueBeforeDiscount * (1-(discountValueB / 100));
+        } else if (value >= slider.min) {
+            programValue = totalValueBeforeDiscount * (1-(discountValueA / 100));
+        }
+        programValue = Math.round(programValue * 100) / 100;
 
-    return downpayment; 
+
+        if (value > cValue) {
+            downpayment = -1 * (value * programLength - programValue);
+        } else if (value > bValue) {
+            downpayment = -1 * (value * programLength - programValue);
+        } else if (value > aThreshold) {
+            downpayment = -1 * (value * programLength - programValue);
+        } else if (value >= sliderInput.min) {
+            downpayment = aValue;
+        }
+
+        console.log("Program Value:", programValue);
+
+        return downpayment; 
+    }
 }
 
 function calculateSliderMonthlyCredit(){
