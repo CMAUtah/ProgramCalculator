@@ -377,7 +377,7 @@ const aValue = Math.round((totalValueBeforeDiscount - (totalValueBeforeDiscount 
 const aThreshold = (((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)))-aValue)/programLength).toFixed(3);
 
 
-const sliderMin = aThreshold;
+const sliderMin = parseFloat(aThreshold);
 const sliderMax = baseMonthlyPayment;
 
 sliderInput.min = sliderMin;
@@ -397,7 +397,6 @@ function updateSliderValue(increment) {
   } else if (currentValue > parseFloat(sliderInput.max)) {
     currentValue = parseFloat(sliderInput.max);
   }
-
   // Update the input field and slider position with two decimal places
   sliderValueInput.value = currentValue.toFixed(2);
   sliderInput.value = currentValue.toFixed(2);
@@ -408,7 +407,7 @@ function updateSliderValue(increment) {
 function updateDisplay(currentValue) {
   let monthlyPayment = calculateMonthlyPayment(currentValue);
   let discountDisplay = calculateDiscountValue(monthlyPayment);
-  const sliderDown = calculateSliderDown(monthlyPayment);
+  let sliderDown = calculateSliderDown(monthlyPayment);
   let sliderMonthlyCredit = calculateSliderMonthlyCredit();
 
   if(monthlyPayment == aThreshold){
@@ -485,8 +484,7 @@ function calculateSliderDown(value) {
     let downpayment;
     if (value == 0) {
         return aValue;
-    } else {
-
+    } else if (0 < value && value < sliderMax-.01){
         // Calculate program value based on sliderValue
         let programValue;
         if (value > cValue) {
@@ -511,9 +509,9 @@ function calculateSliderDown(value) {
             downpayment = aValue;
         }
 
-        console.log("Program Value:", programValue);
-
         return downpayment; 
+    }else{
+        return downPaymentD;
     }
 }
 
