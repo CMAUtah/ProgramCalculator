@@ -410,7 +410,7 @@ function updateDisplay(currentValue) {
   let sliderDown = calculateSliderDown(monthlyPayment);
   let sliderMonthlyCredit = calculateSliderMonthlyCredit();
 
-  if(monthlyPayment == aThreshold){
+  if(monthlyPayment == 0){
     sliderDown -= sliderMonthlyCredit;
 } else if(monthlyPayment > aThreshold){
     monthlyPayment -= sliderMonthlyCredit;
