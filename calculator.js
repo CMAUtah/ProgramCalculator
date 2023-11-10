@@ -369,6 +369,7 @@ const totalValueBeforeDiscount = (baseMonthlyPayment * programLength) + baseDown
 
 let sliderCredit = document.getElementById("sliderCredit");
 
+
 // Calculate dValue and cValue based on provided variables, make sure downPaymentD and downPaymentC are defined
 const dValue = (totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100)) - downPaymentD) / programLength;
 const cValue = Math.round(((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100)) - downPaymentC) / programLength)*100)/100;
@@ -397,10 +398,28 @@ function updateSliderValue(increment) {
   } else if (currentValue > parseFloat(sliderInput.max)) {
     currentValue = parseFloat(sliderInput.max);
   }
+
   // Update the input field and slider position with two decimal places
   sliderValueInput.value = currentValue.toFixed(2);
   sliderInput.value = currentValue.toFixed(2);
   updateDisplay(currentValue);
+  updateSliderMinMax();
+}
+
+sliderCredit.addEventListener('input', () => {
+    updateSliderMinMax();
+    updateSliderValue();
+});
+
+function updateSliderMinMax() {
+    if (sliderCredit.value === '') {
+        sliderInput.min = sliderMin;
+        sliderInput.max = sliderMax;
+    } else {
+        const aThreshold = (((totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100))) - aValue) / programLength).toFixed(3);
+        sliderInput.min = parseFloat(aThreshold) + (parseFloat(sliderCredit.value) / programLength);
+        sliderInput.max = sliderMax;
+    }
 }
 
 
@@ -415,6 +434,7 @@ function updateDisplay(currentValue) {
 } else if(monthlyPayment > aThreshold){
     monthlyPayment -= sliderMonthlyCredit;
 }
+    console.log("min value:",sliderInput.min)
   document.getElementById('monthlyPaymentDisplay').textContent = `$${monthlyPayment.toFixed(2)}`;
   document.getElementById('discountDisplay').textContent = `%${discountDisplay}`;
   document.getElementById('downpaymentDisplay').textContent = `$${sliderDown.toFixed(2)}`;
@@ -437,8 +457,6 @@ sliderInput.addEventListener("input", () => {
 });
 
 sliderValueInput.addEventListener("change", () => {
-    // This event can be used if you prefer to update the slider after you finish typing.
-    // It triggers when you move focus out of the input box.
     
     // Parse the input value and update the slider and display
     const newValue = parseFloat(sliderValueInput.value);
@@ -446,21 +464,21 @@ sliderValueInput.addEventListener("change", () => {
     updateDisplay(newValue);
 });
 
-sliderCredit.addEventListener('input', () => {
-    updateDisplay();
-});
 
 // Initialize the input field with the initial value
 sliderValueInput.value = parseFloat(sliderInput.value).toFixed(2);
 
 
 function calculateMonthlyPayment(value) {
-    if (value == sliderInput.min) {
+    const tolerance = 0.001; // Adjust the tolerance based on your requirements
+
+    if (Math.abs(value - parseFloat(sliderInput.min)) < tolerance) {
         return 0;
     } else {
         return value;
     }
 }
+
 
 
 function calculateDiscountValue(value){
