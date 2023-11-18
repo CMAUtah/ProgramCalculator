@@ -39,6 +39,7 @@ spanElements.forEach(function (spanElement) {
 
 // JavaScript for calculations
 document.getElementById('amountPaid').addEventListener('input', calculateCredit);
+document.getElementById('creditPlus').addEventListener('input', calculateCredit);
 document.getElementById('programEndDate').addEventListener('input', calculateCredit);
 document.getElementById('currentProgramLength').addEventListener('input', calculateCredit);
 document.getElementById('programLength').addEventListener('input', calculateTotalProgramValue);
@@ -111,19 +112,26 @@ toggleSliderDisplay();
 
 
 function calculateCredit() {
-    const amountPaid = parseFloat(document.getElementById('amountPaid').value);
+    const amountPaidInput = document.getElementById('amountPaid').value.trim();
+    const amountPaid = parseFloat(amountPaidInput);
+
     const programEndDateInput = document.getElementById('programEndDate').value.trim();
     const currentProgramLengthInput = document.getElementById('currentProgramLength').value.trim();
     const programLength = parseFloat(document.getElementById('programLength').value);
-    const dateFromInput = document.getElementById('dateFrom').value.trim(); // Get dateFrom input
+    const dateFromInput = document.getElementById('dateFrom').value.trim();
+    let creditPlus = parseFloat(document.getElementById('creditPlus').value);
+    if (creditPlus == '' || isNaN(creditPlus)){
+        creditPlus = 0;
+    }
 
-    let creditAmount = amountPaid; // Default to amountPaid
+    let creditAmount = !isNaN(amountPaid) ? Math.abs(amountPaid) : 0; // Set to 0 if not a number or empty
+
     let timeLeftInMonths = 0;
     let timeLeftInDays = 0;
 
     if (programEndDateInput !== '') {
         const programEndDate = new Date(programEndDateInput);
-        const currentDate = dateFromInput ? new Date(dateFromInput) : new Date(); // Use dateFrom or current date
+        const currentDate = dateFromInput ? new Date(dateFromInput) : new Date();
 
         const timeLeftInMilliseconds = programEndDate - currentDate;
         timeLeftInDays = Math.ceil(timeLeftInMilliseconds / (1000 * 60 * 60 * 24));
@@ -132,20 +140,23 @@ function calculateCredit() {
 
     if (currentProgramLengthInput !== '') {
         const currentProgramLength = parseFloat(currentProgramLengthInput);
-        creditAmount = (amountPaid / currentProgramLength) * timeLeftInMonths;
+        creditAmount = (!isNaN(amountPaid) && !isNaN(currentProgramLength)) ? (Math.abs(amountPaid) / currentProgramLength) * timeLeftInMonths : 0;
     }
 
-    // Calculate monthly credit by dividing creditAmount by programLength
-    let monthlyCredit = creditAmount / programLength;
+    let monthlyCredit = (!isNaN(programLength) && programLength !== 0) ? creditAmount / programLength : 0;
 
-    // Update the "Time Left in Program" span with both time left in months and days
+    creditAmount = creditAmount + creditPlus;
+    monthlyCredit += (creditPlus/programLength);
+    console.log("Credit Amount:",creditAmount);
+
+
     document.getElementById('timeLeft').textContent = timeLeftInMonths.toFixed(2) + ' months (' + timeLeftInDays + ' days)';
-
-    // Update the monthly credit and credit amount with the calculated values
     document.getElementById('monthlyCredit').textContent = monthlyCredit.toFixed(2);
     document.getElementById('creditAmount').textContent = creditAmount.toFixed(2);
+
     return creditAmount;
 }
+
 
 
 
