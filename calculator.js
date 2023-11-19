@@ -39,7 +39,7 @@ spanElements.forEach(function (spanElement) {
 
 // JavaScript for calculations
 document.getElementById('amountPaid').addEventListener('input', calculateCredit);
-document.getElementById('creditPlus').addEventListener('input', calculateCredit);
+document.getElementById('amountPaid1').addEventListener('input', calculateCredit);
 document.getElementById('programEndDate').addEventListener('input', calculateCredit);
 document.getElementById('currentProgramLength').addEventListener('input', calculateCredit);
 document.getElementById('programLength').addEventListener('input', calculateTotalProgramValue);
@@ -112,17 +112,26 @@ toggleSliderDisplay();
 
 
 function calculateCredit() {
-    const amountPaidInput = document.getElementById('amountPaid').value.trim();
-    const amountPaid = parseFloat(amountPaidInput);
+    let amountPaidInput1 = parseFloat(document.getElementById('amountPaid').value.trim());
+    let amountPaidInput2 = parseFloat(document.getElementById('amountPaid1').value.trim());
+    
+    if (isNaN(amountPaidInput1)) {
+        amountPaidInput1 = 0;
+    }
+    if (isNaN(amountPaidInput2)) {
+        amountPaidInput2 = 0;
+    }
+    
+    console.log(amountPaidInput1);
+    console.log(amountPaidInput2);
+    
 
+    const amountPaid = amountPaidInput1 + amountPaidInput2;
     const programEndDateInput = document.getElementById('programEndDate').value.trim();
     const currentProgramLengthInput = document.getElementById('currentProgramLength').value.trim();
     const programLength = parseFloat(document.getElementById('programLength').value);
     const dateFromInput = document.getElementById('dateFrom').value.trim();
-    let creditPlus = parseFloat(document.getElementById('creditPlus').value);
-    if (creditPlus == '' || isNaN(creditPlus)){
-        creditPlus = 0;
-    }
+
 
     let creditAmount = !isNaN(amountPaid) ? Math.abs(amountPaid) : 0; // Set to 0 if not a number or empty
 
@@ -144,10 +153,6 @@ function calculateCredit() {
     }
 
     let monthlyCredit = (!isNaN(programLength) && programLength !== 0) ? creditAmount / programLength : 0;
-
-    creditAmount = creditAmount + creditPlus;
-    monthlyCredit += (creditPlus/programLength);
-    console.log("Credit Amount:",creditAmount);
 
 
     document.getElementById('timeLeft').textContent = timeLeftInMonths.toFixed(2) + ' months (' + timeLeftInDays + ' days)';
