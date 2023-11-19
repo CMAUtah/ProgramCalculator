@@ -41,9 +41,10 @@
             <button id="calculateButton">Calculate BBC</button>
 
             <div id="main">
-                <label for="amountPaid">Total Program Value:<input type="text" id="amountPaid">
+                <label for="amountPaid">Total Program Value:<input type="text" id="amountPaid"> 
+                    + <input type="text" id="amountPaid1"> 
                     <span class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">
-                        If Program End Date, Current Program Length, & Date of Appt are empty, the value in this box will be used as the Credit Amount.
+                        If Program End Date, Current Program Length, & Date of Appt are empty, the value in these boxes will be used as the Credit Amount.
                     </span></span></label>
                 <label for="programEndDate">Program End Date (mm/dd/yyyy):<input type="text" id="programEndDate">
                 <label for="currentProgramLength">Current Program Length (months):<input type="text" id="currentProgramLength"></label>
@@ -52,7 +53,6 @@
                         If this box is empty, today's date will be used.
                     </span></span></label>
                 <p style="margin-top: 5px;">Time Left in Program: <span id="timeLeft"></span></p>
-                <label for="creditPlus">Add to Credit:<input type="text" id="creditPlus"></label>
                 <p style="margin-top: 5px;">Credit Amount: <span id="creditAmount"></span></p>
                 <p style="margin-top: 5px;">Monthly Credit: <span id="monthlyCredit"></span></p>
 
