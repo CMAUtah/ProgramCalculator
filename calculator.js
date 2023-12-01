@@ -364,6 +364,97 @@ function calculateOption4() {
         option4ResultSpan.textContent = '';
     }
 }
+
+function copyDiscountedAmountA() {
+    // Select the text from the discountedAmountA span
+    const discountedAmountElement = document.getElementById("discountedAmountA");
+    const textToCopy = discountedAmountElement.innerText;
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = textToCopy;
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+}
+
+function copyDiscountedAmountB() {
+    // Select the text from the discountedAmountA span
+    const discountedAmountElement = document.getElementById("discountedAmountB");
+    const textToCopy = discountedAmountElement.innerText;
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = textToCopy;
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+}
+
+function copyDiscountedAmountC() {
+    // Select the text from the discountedAmountA span
+    const discountedAmountElement = document.getElementById("discountedAmountC");
+    const textToCopy = discountedAmountElement.innerText;
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = textToCopy;
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+}
+function copyDiscountedAmountD() {
+    // Select the text from the discountedAmountA span
+    const discountedAmountElement = document.getElementById("discountedAmountD");
+    const textToCopy = discountedAmountElement.innerText;
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = textToCopy;
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+}
 //-----------------------------------------------------------------------------------------------------
 
 // Get the necessary elements by their IDs
