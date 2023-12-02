@@ -204,7 +204,7 @@ span {
 
 #copyButton {
     background-color: #cccccc; 
-    border: none; 
+    border: 1px solid #0f0e0e; 
     color: rgb(0, 0, 0); 
     margin-right: 10px; /* Add margin to the right */
     text-align: center; 
