@@ -455,6 +455,101 @@ function copyDiscountedAmountD() {
     // Remove the temporary input element
     document.body.removeChild(tempInput);
 }
+
+
+
+function copyHolidayAmountOne() {
+
+    // Get the finalValue
+    const finalValue = parseFloat(document.getElementById('holidayDiscountOneResult').textContent.trim().split('=')[1]);
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = finalValue.toFixed(2);
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+
+}
+function copyHolidayAmountTwo() {
+
+    // Get the finalValue
+    const finalValue = parseFloat(document.getElementById('holidayDiscountTwoResult').textContent.trim().split('=')[1]);
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = finalValue.toFixed(2);
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+
+}
+function copyHolidayAmountThree() {
+
+    // Get the finalValue
+    const finalValue = parseFloat(document.getElementById('holidayDiscountThreeResult').textContent.trim().split('=')[1]);
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = finalValue.toFixed(2);
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+
+}
+function copyHolidayAmountFour() {
+
+    // Get the finalValue
+    const finalValue = parseFloat(document.getElementById('holidayDiscountFourResult').textContent.trim().split('=')[1]);
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = finalValue.toFixed(2);
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+
+}
 //-----------------------------------------------------------------------------------------------------
 
 // Get the necessary elements by their IDs
