@@ -68,22 +68,22 @@
 
                 <!-- Option A -->
                 <label for="discountValueA">Option A Discount (%):<input type="text" id="discountValueA" value="20"></label>
-                <p style="margin-top: 5px;"><button onclick="copyDiscountedAmountA()">Copy</button>Option A: <span id="discountedAmountA"></span></p>
+                <p style="margin-top: 5px;"><button id="copyButton" onclick="copyDiscountedAmountA()">Copy</button>Option A: <span id="discountedAmountA"></span></p>
 
                 <!-- Option B -->
                 <label for="discountValueB">Option B Discount (%):<input type="text" id="discountValueB" value="10"></label>
                 <label for="downPaymentB">Option B Down:<input type="text" id="downPaymentB" value="499"></label>
-                <p style="margin-top: 5px;"><button onclick="copyDiscountedAmountB()">Copy</button>Option B : <span id="discountedAmountB"></span></p>
+                <p style="margin-top: 5px;"><button id="copyButton" onclick="copyDiscountedAmountB()">Copy</button>Option B : <span id="discountedAmountB"></span></p>
 
                 <!-- Option C -->
                 <label for="discountValueC">Option C Discount (%):<input type="text" id="discountValueC" value="5"></label>
                 <label for="downPaymentC">Option C Down:<input type="text" id="downPaymentC" value="399"></label>
-                <p style="margin-top: 5px;"><button onclick="copyDiscountedAmountC()">Copy</button>Option C: <span id="discountedAmountC"></span></p>
+                <p style="margin-top: 5px;"><button id="copyButton" onclick="copyDiscountedAmountC()">Copy</button>Option C: <span id="discountedAmountC"></span></p>
 
                 <!-- Option D -->
                 <label for="discountValueD">Option D Discount (%):<input type="text" id="discountValueD" value="0"></label>
                 <label for="downPaymentD">Option D Down:<input type="text" id="downPaymentD" value="299"></label>
-                <p style="margin-top: 5px;"><button onclick="copyDiscountedAmountD()">Copy</button>Option D: <span id="discountedAmountD"></span></p>
+                <p style="margin-top: 5px;"><button id="copyButton" onclick="copyDiscountedAmountD()">Copy</button>Option D: <span id="discountedAmountD"></span></p>
             </div>
                 
             <div id="christmasEventCalculator" style="display:none;">
@@ -103,7 +103,7 @@
 
 
                 <!-- Option 4 -->
-                <button onclick="copyHolidayAmountFour()">Copy</button>
+                <button id="copyButton" onclick="copyHolidayAmountFour()">Copy</button>
                 <label for="holidayOptionFour"><input type="text" id="holidayOptionFour" value="36"> Month Program: <span id="holidayDiscountFourResult"></span></label>
             </div>
         </div>
