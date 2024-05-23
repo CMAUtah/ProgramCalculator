@@ -1,20 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Program Calculator</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <ul>
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="basic.html" class="nav-link active">Basic</a></li>
-        <li><a href="bbc.html" class="nav-link">BBC</a></li>
-        <li><a href="mc.html" class="nav-link">MC</a></li>
-    </ul>
-    
-    <h1 style="background-color: lightgray; color: black;">
-        Basic Program Calculator
-    </h1>
+    <header>
+        <ul>
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="basic.html" class="nav-link active">Basic</a></li>
+            <li><a href="bbc.html" class="nav-link">BBC</a></li>
+            <li><a href="mc.html" class="nav-link">MC</a></li>
+            <li><a href="more.html">**More**</a></li>
+        </ul>
+        
+        <h1 style="background-color: lightgray; color: black;">
+            Basic Program Calculator
+        </h1>
+    </header>
 
     <!--slider savings switch-->
     <label class="switch-container">
@@ -26,7 +31,8 @@
         <span class="event-label">Slider</span>
     </label>
 
-        <div id="calculatorInput">
+    <div id="calculatorInput">
+        <section>
             <!-- iPhone-style Toggle Switch with "Holiday Event" label -->
             <label class="switch-container">
                 <span class="event-label">Regular</span>
@@ -36,11 +42,11 @@
                 </label>
                 <span class="event-label">Holiday Event</span>
             </label>
+        </section>
 
 
-    
-            <div class="container" style="max-width: 1200px;">
-                    <!-- Calculate button at the top -->
+        <div class="container" style="max-width: 1200px;">
+            <!-- Calculate button at the top -->
             <button id="calculateButton">Calculate Basic</button>
 
             <div id="main">
@@ -114,6 +120,7 @@
             </div>
         </div>
     </div>
+
     <div id="calculatorSlider">
         <div id="sliderValueDisplay">
             <label for="sliderCredit">Credit: <input type="text" id="sliderCredit" value="0"></label>
