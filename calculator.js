@@ -268,16 +268,28 @@ const holidayOptionOneInput = document.getElementById('holidayOptionOne');
 const holidayOptionTwoInput = document.getElementById('holidayOptionTwo');
 const holidayOptionThreeInput = document.getElementById('holidayOptionThree');
 const holidayOptionFourInput = document.getElementById('holidayOptionFour');
+const holidayDiscountOnePercentInput = document.getElementById('holidayDiscountOnePercent');
+const holidayDiscountTwoPercentInput = document.getElementById('holidayDiscountTwoPercent');
+const holidayDiscountThreePercentInput = document.getElementById('holidayDiscountThreePercent');
+const holidayDiscountFourPercentInput = document.getElementById('holidayDiscountFourPercent');
+
+
+
+
 
 holidayOptionOneInput.addEventListener('input', calculateOption1);
+holidayDiscountOnePercentInput.addEventListener('input', calculateOption1);
 holidayOptionTwoInput.addEventListener('input', calculateOption2);
+holidayDiscountTwoPercentInput.addEventListener('input', calculateOption2);
 holidayOptionThreeInput.addEventListener('input', calculateOption3);
+holidayDiscountThreePercentInput.addEventListener('input', calculateOption3);
 holidayOptionFourInput.addEventListener('input', calculateOption4);
+holidayDiscountFourPercentInput.addEventListener('input', calculateOption4);
 
 
 // Function to calculate Option 1
 function calculateOption1() {
-    const holidayEventDiscountInput = document.getElementById('holidayEventDiscount');
+    const holidayEventDiscountInput = document.getElementById('holidayDiscountOnePercent');
     const option1ResultSpan = document.getElementById('holidayDiscountOneResult'); // Updated ID here
     const programLength = parseInt(document.getElementById('programLength').value);
     const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
@@ -301,7 +313,7 @@ function calculateOption1() {
 
 // Function to calculate Option 2
 function calculateOption2() {
-    const holidayEventDiscountInput = document.getElementById('holidayEventDiscount');
+    const holidayEventDiscountInput = document.getElementById('holidayDiscountTwoPercent');
     const option2ResultSpan = document.getElementById('holidayDiscountTwoResult');
     const programLength = parseInt(document.getElementById('programLength').value);
     const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
@@ -323,7 +335,7 @@ function calculateOption2() {
 
 // Function to calculate Option 3
 function calculateOption3() {
-    const holidayEventDiscountInput = document.getElementById('holidayEventDiscount');
+    const holidayEventDiscountInput = document.getElementById('holidayDiscountThreePercent');
     const option3ResultSpan = document.getElementById('holidayDiscountThreeResult');
     const programLength = parseInt(document.getElementById('programLength').value);
     const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
@@ -345,7 +357,7 @@ function calculateOption3() {
 
 // Function to calculate Option 4
 function calculateOption4() {
-    const holidayEventDiscountInput = document.getElementById('holidayEventDiscount');
+    const holidayEventDiscountInput = document.getElementById('holidayDiscountFourPercent');
     const option4ResultSpan = document.getElementById('holidayDiscountFourResult');
     const programLength = parseInt(document.getElementById('programLength').value);
     const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);

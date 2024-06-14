@@ -17,13 +17,19 @@ label {
     margin-bottom: 5px;
 }
 
-/* Set a fixed width for all input fields */
 input[type="text"] {
     width: 50px; 
     padding: 5px; 
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+input[type="number"]{
+    width: 50px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 3px 0;
 }
 
 span {
@@ -182,6 +188,7 @@ input:checked + .slider:before {
     border: 1px solid #0f0e0e; 
     color: rgb(0, 0, 0); 
     margin-right: 10px; 
+    margin-top: 10px;
     text-align: center; 
     text-decoration: none; 
     display: inline-block; 
