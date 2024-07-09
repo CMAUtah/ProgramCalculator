@@ -7,6 +7,14 @@ body {
     overflow-x: hidden;
 }
 
+body > footer > p{
+    text-align: center;
+}
+
+footer{
+    width: 100%;
+}
+
 h1 {
     padding: 20px;
     text-align: center;
