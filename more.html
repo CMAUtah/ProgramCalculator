@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Calculator</title>
+    <link rel="stylesheet" type="text/css" href="more.css">
+
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="basic.html" class="nav-link">Basic</a></li>
+            <li><a href="bbc.html" class="nav-link">BBC</a></li>
+            <li><a href="mc.html" class="nav-link">MC</a></li>
+            <li><a href="more.html" class="nav-link active">**More**</a></li>
+        </ul>
+    </header>
+    <h1>Extended Time Calculator</h1>
+    <div class="container">
+        <p><label for="programEndDate">Current Program End Date (mm/dd/yyy): <input type="text" id="programEndDate"></label></p>
+        <p><label for="returnDate">Proposed Return Date: <input type="date" id="returnDate"></label></p>
+        <p><label for="dateFrom">Date Of Leave If Not Today: <input type="date" id="dateFrom">
+            <span class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">
+                If this box is empty, today's date will be used.
+            </span></span></label></p>
+        <p style="margin-top: 5px;">Time Left: <span id="timeLeft">days</span></p>
+        <p>Extended Time Used: <span id="extendedTimeUsed">0</span> days</p>
+        <p>Old End Date: <span id="oldEndDate">-</span></p>
+        <p>New End Date: <span id="newEndDate">-</span></p>
+        <button onclick="copyText()">Copy</button>
+    </div>
+    
+
+    <script src="more.js"></script>
+</body>
+</html>
