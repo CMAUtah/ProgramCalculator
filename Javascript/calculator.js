@@ -666,7 +666,7 @@ function copyHolidayAmountFour() {
 function copyHolidayAmountFourBasic() {
 
     // Get the finalValue
-    const finalValue = parseFloat(document.getElementById('holidayDiscountThreeResultBasic').textContent.trim().split('=')[1]);
+    const finalValue = parseFloat(document.getElementById('holidayDiscountFourResultBasic').textContent.trim().split('=')[1]);
 
     // Create a temporary input element
     const tempInput = document.createElement("input");
