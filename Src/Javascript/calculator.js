@@ -427,6 +427,49 @@ function calculateOption4Basic() {
         option4ResultSpan.textContent = '';
     }
 }
+function copyCreditAmount(){
+    const discountedAmountElement = document.getElementById("creditAmount");
+    const textToCopy = discountedAmountElement.innerText;
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = textToCopy;
+
+    // Append the input element to the DOM
+    document.body.appendChild(tempInput);
+
+    // Select the text in the input element
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(tempInput);
+}
+
+function copyMonthyCredit(){
+        const discountedAmountElement = document.getElementById("monthlyCredit");
+        const textToCopy = discountedAmountElement.innerText;
+    
+        // Create a temporary input element
+        const tempInput = document.createElement("input");
+        tempInput.value = textToCopy;
+    
+        // Append the input element to the DOM
+        document.body.appendChild(tempInput);
+    
+        // Select the text in the input element
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999); // For mobile devices
+    
+        // Copy the text to the clipboard
+        document.execCommand("copy");
+    
+        // Remove the temporary input element
+        document.body.removeChild(tempInput);
+}
 
 function copyDiscountedAmountA() {
     // Select the text from the discountedAmountA span
