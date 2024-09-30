@@ -57,8 +57,9 @@
                         If this box is empty, today's date will be used.
                     </span></span></label>
                 <p style="margin-top: 5px;">Time Left in Program: <span id="timeLeft"></span></p>
-                <p style="margin-top: 5px;">Credit Amount: <span id="creditAmount"></span></p>
-                <p style="margin-top: 5px;">Monthly Credit: <span id="monthlyCredit"></span></p>
+                <p style="margin-top: 5px;"><button id="copyButton" onclick="copyCreditAmount()">Copy</button>Credit Amount: <span id="creditAmount"></span></p>
+                <p style="margin-top: 5px;"><button id="copyButton" onclick="copyMonthyCredit()">Copy</button>Monthly Credit: <span id="monthlyCredit"></span></p>
+
 
                 <h2>Base Program Value</h2>
                 <label for="programLength">Basic Opt D Program Length (months):<input type="text" id="programLength" value="36"></label>
