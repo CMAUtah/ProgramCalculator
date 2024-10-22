@@ -65,9 +65,6 @@ function copyText() {
 
     // Remove the textarea from the DOM
     document.body.removeChild(textarea);
-
-    // Alert the user that text has been copied
-    alert('Text copied to clipboard!');
 }
 
 
