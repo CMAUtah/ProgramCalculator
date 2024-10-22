@@ -49,7 +49,7 @@ function copyText() {
     const newEndDate = document.getElementById('newEndDate').textContent;
 
     // Concatenate the text with new lines
-    const textToCopy = `Extended Time Used: ${extendedTimeUsed} days\nOld End Date: ${oldEndDate}\nNew End Date: ${newEndDate}`;
+    const textToCopy = `Time Extended: ${extendedTimeUsed} days\nOld End Date: ${oldEndDate}\nNew End Date: ${newEndDate}`;
 
     // Create a textarea element to copy the text to clipboard
     const textarea = document.createElement('textarea');
