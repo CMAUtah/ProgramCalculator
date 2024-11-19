@@ -160,15 +160,14 @@ function calculateCredit() {
 
 
     document.getElementById('timeLeft').textContent = timeLeftInMonths.toFixed(2) + ' months (' + timeLeftInDays + ' days)';
-    document.getElementById('monthlyCredit').textContent = monthlyCredit.toFixed(2);
-    document.getElementById('creditAmount').textContent = creditAmount.toFixed(2);
+    document.getElementById('monthlyCredit').textContent =
+    Number(monthlyCredit).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    document.getElementById('creditAmount').textContent =
+    Number(creditAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     return creditAmount;
 }
-
-
-
-
 
 
 
@@ -180,556 +179,324 @@ function calculateTotalProgramValue() {
 
     if (!isNaN(programLength) && !isNaN(baseMonthlyPayment) && !isNaN(baseDownPayment)) {
         const totalProgramValue = (programLength * baseMonthlyPayment) + baseDownPayment;
-        document.getElementById('totalProgramValue').textContent = totalProgramValue.toFixed(2);
+        document.getElementById('totalProgramValue').textContent =  Number(totalProgramValue).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     } else {
         document.getElementById('totalProgramValue').textContent = 'Invalid input';
     }
 }
 
+// Helper to parse and sanitize numeric input
+function getNumericValue(elementId) {
+    const element = document.getElementById(elementId);
+    if (!element) {
+        console.error(`Element with ID "${elementId}" not found.`);
+        return null;
+    }
+    const value = element.value ? element.value.replace(/,/g, '') : element.textContent.replace(/,/g, '');
+    const numericValue = parseFloat(value);
+    if (isNaN(numericValue)) {
+        console.error(`Invalid input for element: ${elementId} - Value: "${value}"`);
+        return null;
+    }
+    return numericValue;
+}
+
+// Generic discount calculation function
+function calculateDiscount(option) {
+    // Handle unique logic for Discount A
+    if (option === 'A') {
+        const programLength = getNumericValue('programLength');
+        const baseMonthlyPayment = getNumericValue('baseMonthlyPayment');
+        const baseDownPayment = getNumericValue('baseDownPayment');
+        const discountPercentage = getNumericValue('discountValueA');
+        const creditAmount = getNumericValue('creditAmount');
+
+        if (
+            programLength === null ||
+            baseMonthlyPayment === null ||
+            baseDownPayment === null ||
+            discountPercentage === null ||
+            creditAmount === null
+        ) {
+            document.getElementById('discountedAmountA').textContent = 'Invalid input';
+            return;
+        }
+
+        const totalCost = (baseMonthlyPayment * programLength) + baseDownPayment;
+        const discountedAmountA = (totalCost * (1 - discountPercentage / 100)) - creditAmount;
+
+        document.getElementById('discountedAmountA').textContent = Number(discountedAmountA).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+        return;
+    }
+
+    // Handle general logic for B, C, and D
+    const programLength = getNumericValue('programLength');
+    const baseMonthlyPayment = getNumericValue('baseMonthlyPayment');
+    const baseDownPayment = getNumericValue('baseDownPayment');
+    const discountValueId = `discountValue${option}`;
+    const downPaymentId = `downPayment${option}`;
+    const discountedAmountId = `discountedAmount${option}`;
+
+    const discountValue = getNumericValue(discountValueId);
+    const downPayment = getNumericValue(downPaymentId);
+    const creditAmount = getNumericValue('creditAmount');
+    const monthlyCredit = getNumericValue('monthlyCredit');
+
+    if (
+        programLength === null ||
+        baseMonthlyPayment === null ||
+        baseDownPayment === null ||
+        discountValue === null ||
+        downPayment === null ||
+        creditAmount === null ||
+        monthlyCredit === null ||
+        programLength === 0
+    ) {
+        document.getElementById(discountedAmountId).textContent = 'Invalid input';
+        return;
+    }
+
+    const totalValueBeforeDiscount = (baseMonthlyPayment * programLength) + baseDownPayment;
+    const discountedValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValue / 100)) - downPayment;
+    const discountedAmount = (discountedValue / programLength) - monthlyCredit;
+
+    document.getElementById(discountedAmountId).textContent = Number(discountedAmount).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+}
+
+// Specific functions for each option
 function calculateDiscountA() {
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const discountPercentage = parseFloat(document.getElementById('discountValueA').value);
-    const creditAmount = parseFloat(document.getElementById('creditAmount').textContent);
-
-    if (!isNaN(programLength) && !isNaN(baseMonthlyPayment) && !isNaN(baseDownPayment) && !isNaN(discountPercentage) && !isNaN(creditAmount)) {
-        const discountedAmountA = (((baseMonthlyPayment * programLength) + baseDownPayment) * (1 - (discountPercentage / 100))) - creditAmount;
-        document.getElementById('discountedAmountA').textContent = discountedAmountA.toFixed(2);
-    } else {
-        document.getElementById('discountedAmountA').textContent = 'Invalid input';
-    }
+    calculateDiscount('A');
 }
 
-
-// Function to calculate Option B discount
 function calculateDiscountB() {
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const discountValueB = parseFloat(document.getElementById('discountValueB').value);
-    const downPaymentB = parseFloat(document.getElementById('downPaymentB').value);
-    const creditAmount = parseFloat(document.getElementById('creditAmount').textContent);
-    const monthlyCredit = parseFloat(document.getElementById('monthlyCredit').textContent);
-
-    if (!isNaN(programLength) && !isNaN(baseMonthlyPayment) && !isNaN(baseDownPayment) && !isNaN(discountValueB) && !isNaN(downPaymentB) && !isNaN(creditAmount) && !isNaN(monthlyCredit) && programLength !== 0) {
-        const totalValueBeforeDiscount = (baseMonthlyPayment * programLength) + baseDownPayment;
-        const discountedValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueB / 100)) - downPaymentB;
-        const discountedAmountB = (discountedValue / programLength) - monthlyCredit; // Include division by program length and subtraction of monthly credit
-        document.getElementById('discountedAmountB').textContent = discountedAmountB.toFixed(2);
-    } else {
-        document.getElementById('discountedAmountB').textContent = 'Invalid input';
-    }
+    calculateDiscount('B');
 }
 
-
-
-
-// Function to calculate Option C discount
 function calculateDiscountC() {
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const discountValueC = parseFloat(document.getElementById('discountValueC').value);
-    const downPaymentC = parseFloat(document.getElementById('downPaymentC').value);
-    const creditAmount = parseFloat(document.getElementById('creditAmount').textContent);
-    const monthlyCredit = parseFloat(document.getElementById('monthlyCredit').textContent);
-
-    if (!isNaN(programLength) && !isNaN(baseMonthlyPayment) && !isNaN(baseDownPayment) && !isNaN(discountValueC) && !isNaN(downPaymentC) && !isNaN(creditAmount) && !isNaN(monthlyCredit) && programLength !== 0) {
-        const totalValueBeforeDiscount = (baseMonthlyPayment * programLength) + baseDownPayment;
-        const discountedValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueC / 100)) - downPaymentC;
-        const discountedAmountC = (discountedValue / programLength) - monthlyCredit;
-        document.getElementById('discountedAmountC').textContent = discountedAmountC.toFixed(2);
-    } else {
-        document.getElementById('discountedAmountC').textContent = 'Invalid input';
-    }
+    calculateDiscount('C');
 }
 
-
-
-// Function to calculate Option D discount
 function calculateDiscountD() {
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const discountValueD = parseFloat(document.getElementById('discountValueD').value);
-    const downPaymentD = parseFloat(document.getElementById('downPaymentD').value);
-    const creditAmount = parseFloat(document.getElementById('creditAmount').textContent);
-    const monthlyCredit = parseFloat(document.getElementById('monthlyCredit').textContent);
-
-    if (!isNaN(programLength) && !isNaN(baseMonthlyPayment) && !isNaN(baseDownPayment) && !isNaN(discountValueD) && !isNaN(downPaymentD) && !isNaN(creditAmount) && !isNaN(monthlyCredit) && programLength !== 0) {
-        const totalValueBeforeDiscount = (baseMonthlyPayment * programLength) + baseDownPayment;
-        const discountedValue = totalValueBeforeDiscount - (totalValueBeforeDiscount * (discountValueD / 100)) - downPaymentD;
-        const discountedAmountD = (discountedValue / programLength) - monthlyCredit;
-        document.getElementById('discountedAmountD').textContent = discountedAmountD.toFixed(2);
-    } else {
-        document.getElementById('discountedAmountD').textContent = 'Invalid input';
-    }
+    calculateDiscount('D');
 }
+
+
 
 // Holiday Event-------------------------------------------------------------------------------------
-const holidayOptionOneInput = document.getElementById('holidayOptionOne');
-const holidayOptionTwoInput = document.getElementById('holidayOptionTwo');
-const holidayOptionThreeInput = document.getElementById('holidayOptionThree');
-const holidayOptionFourInput = document.getElementById('holidayOptionFour');
-const holidayDiscountOnePercentInput = document.getElementById('holidayDiscountPercent');
+// Generic function to calculate holiday discount
+function calculateHolidayOption(optionKey, isBasic = false) {
+    console.log(`Calculating option ${optionKey}, isBasic: ${isBasic}`); // Debug log
+
+    // Get all required values
+    const holidayEventDiscount = getNumericValue('holidayDiscountPercent');
+    const programLength = getNumericValue('programLength');
+    const baseMonthlyPayment = getNumericValue('baseMonthlyPayment');
+    const baseDownPayment = getNumericValue('baseDownPayment');
+    const holidayOption = getNumericValue(`holidayOption${optionKey}`);
+    const creditAmount = getNumericValue('creditAmount');
+
+    // Determine the result span ID
+    const resultSpanId = isBasic
+        ? `holidayDiscount${optionKey}ResultBasic`
+        : `holidayDiscount${optionKey}Result`;
+    const resultSpan = document.getElementById(resultSpanId);
+
+    // Ensure the result span exists
+    if (!resultSpan) {
+        console.error(`Result span with ID "${resultSpanId}" not found.`);
+        return;
+    }
+
+    console.log(`Inputs for option ${optionKey}:`, {
+        holidayEventDiscount,
+        programLength,
+        baseMonthlyPayment,
+        baseDownPayment,
+        holidayOption,
+        creditAmount,
+    }); // Debug log
+
+    // Validate inputs
+    if (
+        holidayEventDiscount === null ||
+        programLength === null ||
+        baseMonthlyPayment === null ||
+        baseDownPayment === null ||
+        holidayOption === null
+    ) {
+        console.error(`Invalid input for option ${optionKey}`);
+        resultSpan.textContent = 'Invalid input';
+        return;
+    }
+
+    // Calculate discounted amount
+    const discountedAmount =
+        ((holidayOption * baseMonthlyPayment) +
+            (baseDownPayment / (programLength / holidayOption))) *
+        (1 - holidayEventDiscount / 100);
+
+    console.log(`Discounted amount for option ${optionKey}: ${discountedAmount}`); // Debug log
+
+    // Prepare result text
+    let resultText = Number(discountedAmount).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+
+    // Include credit logic for Option 1 and all basic options
+    if (isBasic || optionKey === 'One') {
+        if (creditAmount !== null) {
+            const finalValue = discountedAmount - creditAmount;
+            console.log(`Final value after credit for option ${optionKey}: ${finalValue}`); // Debug log
+            resultText += ` - Credit = ${Number(finalValue).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            })}`;
+        }
+    }
+
+    // Update the result span
+    resultSpan.textContent = resultText;
+    console.log(`Updated result for option ${optionKey}: ${resultText}`); // Debug log
+}
 
 
-holidayOptionOneInput.addEventListener('input', calculateOption1);
-holidayOptionTwoInput.addEventListener('input', calculateOption2);
-holidayOptionThreeInput.addEventListener('input', calculateOption3);
-holidayOptionFourInput.addEventListener('input', calculateOption4);
-
-
-// Function to calculate Option 1
+// Function definitions for each option
 function calculateOption1() {
-    const holidayEventDiscountInput = document.getElementById('holidayDiscountPercent');
-    const option1ResultSpan = document.getElementById('holidayDiscountOneResult'); 
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const holidayOptionOne = parseFloat(document.getElementById('holidayOptionOne').value); // Get the value of "holidayOptionOne" from the input field
-    const holidayEventDiscount = parseFloat(holidayEventDiscountInput.value);
-    const creditAmount = parseFloat(document.getElementById('creditAmount').textContent);
-
-    if (!isNaN(holidayOptionOne) && !isNaN(holidayEventDiscount)) {
-        // Calculate Option 1 based on the provided formula
-        const discountedAmount = ((holidayOptionOne * baseMonthlyPayment) + (baseDownPayment / (programLength / holidayOptionOne))) * (1 - (holidayEventDiscount / 100));
-        const finalValue = (discountedAmount - creditAmount)
-
-        // Display the result for Option 1 within the "holidayDiscountOneResult" span
-        option1ResultSpan.textContent = ' ' + discountedAmount.toFixed(2) + " - Credit = " + finalValue.toFixed(2);
-    } else {
-        // If invalid input, clear the result within the "holidayDiscountOneResult" span
-        option1ResultSpan.textContent = '';
-    }
+    calculateHolidayOption('One');
 }
-
-// Function to calculate Option 2
 function calculateOption2() {
-    const holidayEventDiscountInput = document.getElementById('holidayDiscountPercent');
-    const option2ResultSpan = document.getElementById('holidayDiscountTwoResult');
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const holidayOptionTwo = parseFloat(document.getElementById('holidayOptionTwo').value);
-    const holidayEventDiscount = parseFloat(holidayEventDiscountInput.value);
-
-
-    if (!isNaN(holidayOptionTwo) && !isNaN(holidayEventDiscount)) {
-        const discountedAmount = ((holidayOptionTwo * baseMonthlyPayment) + (baseDownPayment / (programLength / holidayOptionTwo))) * (1 - (holidayEventDiscount / 100));
-        option2ResultSpan.textContent = ' ' + discountedAmount.toFixed(2);
-
-    } else {
-        option2ResultSpan.textContent = '';
-    }
+    calculateHolidayOption('Two');
 }
-
 function calculateOption2Basic() {
-    const holidayEventDiscountInput = document.getElementById('holidayDiscountPercent');
-    const option2ResultSpan = document.getElementById('holidayDiscountTwoResultBasic'); 
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const holidayOptionTwo = parseFloat(document.getElementById('holidayOptionTwo').value);
-    const holidayEventDiscount = parseFloat(holidayEventDiscountInput.value);
-    const creditAmount = parseFloat(document.getElementById('creditAmount').textContent);
-
-    if (!isNaN(holidayOptionTwo) && !isNaN(holidayEventDiscount)) {
-        const discountedAmount = ((holidayOptionTwo * baseMonthlyPayment) + (baseDownPayment / (programLength / holidayOptionTwo))) * (1 - (holidayEventDiscount / 100));
-        const finalValue = (discountedAmount - creditAmount)
-
-        option2ResultSpan.textContent = ' ' + discountedAmount.toFixed(2) + " - Credit = " + finalValue.toFixed(2);
-    } else {
-        option2ResultSpan.textContent = '';
-    }
+    calculateHolidayOption('Two', true);
 }
-
-
-// Function to calculate Option 3
 function calculateOption3() {
-    const holidayEventDiscountInput = document.getElementById('holidayDiscountPercent');
-    const option3ResultSpan = document.getElementById('holidayDiscountThreeResult');
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const holidayOptionThree = parseFloat(document.getElementById('holidayOptionThree').value);
-    const holidayEventDiscount = parseFloat(holidayEventDiscountInput.value);
-
-
-    if (!isNaN(holidayOptionThree) && !isNaN(holidayEventDiscount)) {
-        const discountedAmount = ((holidayOptionThree * baseMonthlyPayment) + (baseDownPayment / (programLength / holidayOptionThree))) * (1 - (holidayEventDiscount / 100));
-        option3ResultSpan.textContent = ' ' + discountedAmount.toFixed(2);
-    } else {
-        option3ResultSpan.textContent = '';
-    }
+    calculateHolidayOption('Three');
 }
-
 function calculateOption3Basic() {
-    const holidayEventDiscountInput = document.getElementById('holidayDiscountPercent');
-    const option3ResultSpan = document.getElementById('holidayDiscountThreeResultBasic'); 
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const holidayOptionThree = parseFloat(document.getElementById('holidayOptionThree').value);
-    const holidayEventDiscount = parseFloat(holidayEventDiscountInput.value);
-    const creditAmount = parseFloat(document.getElementById('creditAmount').textContent);
-
-    if (!isNaN(holidayOptionThree) && !isNaN(holidayEventDiscount)) {
-        // Calculate Option 1 based on the provided formula
-        const discountedAmount = ((holidayOptionThree * baseMonthlyPayment) + (baseDownPayment / (programLength / holidayOptionThree))) * (1 - (holidayEventDiscount / 100));
-        const finalValue = (discountedAmount - creditAmount)
-
-        // Display the result for Option 1 within the "holidayDiscountOneResult" span
-        option3ResultSpan.textContent = ' ' + discountedAmount.toFixed(2) + " - Credit = " + finalValue.toFixed(2);
-    } else {
-        // If invalid input, clear the result within the "holidayDiscountOneResult" span
-        option3ResultSpan.textContent = '';
-    }
+    calculateHolidayOption('Three', true);
 }
-
-// Function to calculate Option 4
 function calculateOption4() {
-    const holidayEventDiscountInput = document.getElementById('holidayDiscountPercent');
-    const option4ResultSpan = document.getElementById('holidayDiscountFourResult');
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const holidayOptionFour = parseFloat(document.getElementById('holidayOptionFour').value);
-    const holidayEventDiscount = parseFloat(holidayEventDiscountInput.value);
-
-    if (!isNaN(holidayOptionFour) && !isNaN(holidayEventDiscount)) {
-        const discountedAmount = ((holidayOptionFour * baseMonthlyPayment) + (baseDownPayment / (programLength / holidayOptionFour))) * (1 - (holidayEventDiscount / 100));
-        option4ResultSpan.textContent = ' ' + discountedAmount.toFixed(2);
-    } else {
-        option4ResultSpan.textContent = '';
-    }
+    calculateHolidayOption('Four');
 }
-
 function calculateOption4Basic() {
-    const holidayEventDiscountInput = document.getElementById('holidayDiscountPercent');
-    const option4ResultSpan = document.getElementById('holidayDiscountFourResultBasic'); 
-    const programLength = parseInt(document.getElementById('programLength').value);
-    const baseMonthlyPayment = parseFloat(document.getElementById('baseMonthlyPayment').value);
-    const baseDownPayment = parseFloat(document.getElementById('baseDownPayment').value);
-    const holidayOptionFour = parseFloat(document.getElementById('holidayOptionFour').value);
-    const holidayEventDiscount = parseFloat(holidayEventDiscountInput.value);
-    const creditAmount = parseFloat(document.getElementById('creditAmount').textContent);
+    calculateHolidayOption('Four', true);
+}
 
-    if (!isNaN(holidayOptionFour) && !isNaN(holidayEventDiscount)) {
-        // Calculate Option 1 based on the provided formula
-        const discountedAmount = ((holidayOptionFour * baseMonthlyPayment) + (baseDownPayment / (programLength / holidayOptionFour))) * (1 - (holidayEventDiscount / 100));
-        const finalValue = (discountedAmount - creditAmount)
 
-        // Display the result for Option 1 within the "holidayDiscountOneResult" span
-        option4ResultSpan.textContent = ' ' + discountedAmount.toFixed(2) + " - Credit = " + finalValue.toFixed(2);
-    } else {
-        // If invalid input, clear the result within the "holidayDiscountOneResult" span
-        option4ResultSpan.textContent = '';
+
+
+
+
+
+
+
+function copyToClipboard(elementId, parseBasic = false) {
+    const element = document.getElementById(elementId);
+    if (!element) {
+        console.error(`Element with ID "${elementId}" not found.`);
+        alert(`Element with ID "${elementId}" not found.`);
+        return;
     }
-}
-function copyCreditAmount(){
-    const discountedAmountElement = document.getElementById("creditAmount");
-    const textToCopy = discountedAmountElement.innerText;
 
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = textToCopy;
+    let textToCopy = element.innerText;
 
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
+    if (parseBasic) {
+        // For "basic" cases, extract the value after "=" and preserve commas
+        const content = element.textContent.trim();
+        const parts = content.split('=');
+        if (parts.length < 2) {
+            console.error(`No '=' found in content for "${elementId}"`);
+            alert("Invalid content format. Cannot copy.");
+            return;
+        }
+        textToCopy = parts[1].trim(); // Keep the value after "=" as-is, including commas
+    }
 
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
-}
-
-function copyMonthyCredit(){
-        const discountedAmountElement = document.getElementById("monthlyCredit");
-        const textToCopy = discountedAmountElement.innerText;
-    
-        // Create a temporary input element
+    if (navigator.clipboard) {
+        // Use modern Clipboard API
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            console.log(`Copied text: "${textToCopy}" from element ID: "${elementId}"`);
+        }).catch(err => {
+            console.error(`Failed to copy text: ${err}`);
+            alert("Failed to copy text. Please try again.");
+        });
+    } else {
+        // Fallback for older browsers
         const tempInput = document.createElement("input");
         tempInput.value = textToCopy;
-    
-        // Append the input element to the DOM
         document.body.appendChild(tempInput);
-    
-        // Select the text in the input element
         tempInput.select();
         tempInput.setSelectionRange(0, 99999); // For mobile devices
-    
-        // Copy the text to the clipboard
         document.execCommand("copy");
-    
-        // Remove the temporary input element
         document.body.removeChild(tempInput);
+    }
+}
+
+
+
+// General Usage
+function copyCreditAmount() {
+    copyToClipboard("creditAmount");
+}
+
+function copyMonthyCredit() {
+    copyToClipboard("monthlyCredit");
 }
 
 function copyDiscountedAmountA() {
-    // Select the text from the discountedAmountA span
-    const discountedAmountElement = document.getElementById("discountedAmountA");
-    const textToCopy = discountedAmountElement.innerText;
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = textToCopy;
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
+    copyToClipboard("discountedAmountA");
 }
 
 function copyDiscountedAmountB() {
-    // Select the text from the discountedAmountA span
-    const discountedAmountElement = document.getElementById("discountedAmountB");
-    const textToCopy = discountedAmountElement.innerText;
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = textToCopy;
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
+    copyToClipboard("discountedAmountB");
 }
 
 function copyDiscountedAmountC() {
-    // Select the text from the discountedAmountA span
-    const discountedAmountElement = document.getElementById("discountedAmountC");
-    const textToCopy = discountedAmountElement.innerText;
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = textToCopy;
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
+    copyToClipboard("discountedAmountC");
 }
 
 function copyDiscountedAmountD() {
-    // Select the text from the discountedAmountA span
-    const discountedAmountElement = document.getElementById("discountedAmountD");
-    const textToCopy = discountedAmountElement.innerText;
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = textToCopy;
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
+    copyToClipboard("discountedAmountD");
 }
 
-
-
+// Holiday Amount Functions
 function copyHolidayAmountOne() {
-
-    // Get the finalValue
-    const finalValue = parseFloat(document.getElementById('holidayDiscountOneResult').textContent.trim().split('=')[1]);
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = finalValue.toFixed(2);
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
-
+    copyToClipboard("holidayDiscountOneResult", true);
 }
 
 function copyHolidayAmountTwo() {
-
-    const discountedAmountElement = document.getElementById("holidayDiscountTwoResult");
-    const textToCopy = discountedAmountElement.innerText;
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = textToCopy;
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
+    copyToClipboard("holidayDiscountTwoResult");
 }
 
 function copyHolidayAmountTwoBasic() {
-
-    // Get the finalValue
-    const finalValue = parseFloat(document.getElementById('holidayDiscountTwoResultBasic').textContent.trim().split('=')[1]);
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = finalValue.toFixed(2);
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
-
+    copyToClipboard("holidayDiscountTwoResultBasic", true);
 }
 
 function copyHolidayAmountThree() {
-
-    const discountedAmountElement = document.getElementById("holidayDiscountThreeResult");
-    const textToCopy = discountedAmountElement.innerText;
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = textToCopy;
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
+    copyToClipboard("holidayDiscountThreeResult");
 }
 
 function copyHolidayAmountThreeBasic() {
-
-    // Get the finalValue
-    const finalValue = parseFloat(document.getElementById('holidayDiscountThreeResultBasic').textContent.trim().split('=')[1]);
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = finalValue.toFixed(2);
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
-
+    copyToClipboard("holidayDiscountThreeResultBasic", true);
 }
 
 function copyHolidayAmountFour() {
-
-    const discountedAmountElement = document.getElementById("holidayDiscountFourResult");
-    const textToCopy = discountedAmountElement.innerText;
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = textToCopy;
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
+    copyToClipboard("holidayDiscountFourResult");
 }
 
 function copyHolidayAmountFourBasic() {
-
-    // Get the finalValue
-    const finalValue = parseFloat(document.getElementById('holidayDiscountFourResultBasic').textContent.trim().split('=')[1]);
-
-    // Create a temporary input element
-    const tempInput = document.createElement("input");
-    tempInput.value = finalValue.toFixed(2);
-
-    // Append the input element to the DOM
-    document.body.appendChild(tempInput);
-
-    // Select the text in the input element
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text to the clipboard
-    document.execCommand("copy");
-
-    // Remove the temporary input element
-    document.body.removeChild(tempInput);
-
+    copyToClipboard("holidayDiscountFourResultBasic", true);
 }
+
+
 
 //-----------------------------------------------------------------------------------------------------
 
