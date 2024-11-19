@@ -115,8 +115,9 @@ toggleSliderDisplay();
 
 
 function calculateCredit() {
-    let amountPaidInput1 = parseFloat(document.getElementById('amountPaid').value.trim());
-    let amountPaidInput2 = parseFloat(document.getElementById('amountPaid1').value.trim());
+    let amountPaidInput1 = parseFloat(document.getElementById('amountPaid').value.replace(/,/g, '').trim());
+    let amountPaidInput2 = parseFloat(document.getElementById('amountPaid1').value.replace(/,/g, '').trim());
+
     
     if (isNaN(amountPaidInput1)) {
         amountPaidInput1 = 0;
