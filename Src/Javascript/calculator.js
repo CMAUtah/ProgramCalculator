@@ -115,8 +115,8 @@ toggleSliderDisplay();
 
 
 function calculateCredit() {
-    let amountPaidInput1 = parseFloat(document.getElementById('amountPaid').value.replace(/,/g, '').trim());
-    let amountPaidInput2 = parseFloat(document.getElementById('amountPaid1').value.replace(/,/g, '').trim());
+    let amountPaidInput1 = parseFloat(document.getElementById('amountPaid').value.replace(/[$,]/g, '').trim());
+    let amountPaidInput2 = parseFloat(document.getElementById('amountPaid1').value.replace(/[$,]/g, '').trim());
 
     
     if (isNaN(amountPaidInput1)) {
@@ -192,7 +192,7 @@ function getNumericValue(elementId) {
         console.error(`Element with ID "${elementId}" not found.`);
         return null;
     }
-    const value = element.value ? element.value.replace(/,/g, '') : element.textContent.replace(/,/g, '');
+    const value = element.value ? element.value.replace(/[$,]/g, '') : element.textContent.replace(/[$,]/g, '');
     const numericValue = parseFloat(value);
     if (isNaN(numericValue)) {
         console.error(`Invalid input for element: ${elementId} - Value: "${value}"`);
