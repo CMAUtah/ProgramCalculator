@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Program Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="Stylesheet/more.css">
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="basic.html" class="nav-link ">Basic</a></li>
+            <li><a href="bbc.html" class="nav-link">BBC</a></li>
+            <li><a href="mc.html" class="nav-link">MC</a></li>
+            <li><a href="more.html">More</a></li>
+            <li class="settings-link"><a href="settings.html" class="nav-link active">Settings ⚙</a></li>
+        </ul>
+        <h1 style="background-color: rgb(252, 177, 15); color: black;">
+            Settings
+        </h1>
+        <h3>This does absolutely nothing at the moment and is still under construction</h3>
+    </header>
+
+    <div class="container">
+        <h3>Calculator Option Settings</h3>
+        <p><u>Shown options and names</u></p>
+        <label>
+            <input type="checkbox" id="optionAEnabled" checked> Enable Option 1
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption1Name" value="Option A">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="optionAEnabled" checked> Enable Option 2
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption2Name" value="Option A-">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="optionAEnabled" checked> Enable Option 3
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption3Name" value="Option B+">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="optionAEnabled" checked> Enable Option 4
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption4Name" value="Option B">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="optionAEnabled" checked> Enable Option 5
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption5Name" value="Option C">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="option6Enabled" checked> Enable Option 6
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption6Name" value="Option D">
+        </label>
+        <br>
+    </div>
+
+    <div class="container">
+        <h3>Basic Discounts & Downpayments</h3>
+    </div>
+
+    <div class="container" style="background-color: lightgray;">
+        <h3>Black Belt Club Discounts & Downpayments</h3>
+    </div>
+
+    <div class="container" style="background-color: lightcoral;">
+        <h3>Masters Club Discounts & Downpayments</h3>
+    </div>
+
+    <button onclick="saveSettings()">Save Settings</button>
+
+    <footer>
+        <p>&copy; 2023 All Rights Reserved</p>
+    </footer>
+</body>
+</html>
