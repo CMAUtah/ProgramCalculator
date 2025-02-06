@@ -95,6 +95,22 @@ input[type="text"] {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+input[type="date"] {
+    padding: 5px;
+    width: 110px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.settings input[type="text"] {
+    width: 75px; 
+}
+input[type="number"]{
+    padding: 5px;
+    width: 70px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 
 /* Tooltip styles */
 .tooltip-container {
