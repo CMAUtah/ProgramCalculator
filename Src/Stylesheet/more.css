@@ -204,12 +204,25 @@ button:active {
 }
 
 #savedMessage {
-    font-size: 16px;
-    margin-left: 15px;         /* Space between button and message */
+    font-size: 25px;
     color: green;
-    opacity: 0;                /* Hidden by default */
+    opacity: 0; /* Initially hidden */
     transition: opacity 0.5s ease-in-out;
+    
+    /* Positioning */
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    margin-left: 0; /* No need for left margin */
+    
+    /* Ensure it's on top of everything */
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.8); /* Optional: Adds background to make it readable */
+    box-shadow: 5px 5px 5px grey;
+    padding: 5px 10px; /* Optional: Adds padding for better appearance */
+    border-radius: 5px; /* Optional: Rounded corners */
 }
+
 
 .option-separator {
     border: none;                 /* Remove all default borders */
