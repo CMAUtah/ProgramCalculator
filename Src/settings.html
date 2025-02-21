@@ -69,47 +69,59 @@
         </label>
         <br>
     </div>
+    
+    <div class="buttonContainer">
+        <button onclick="saveSettings()">Save Settings</button>
+        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+    </div>
 
-<!-- Basic Program -->
-<div class="container">
-    <h3>Basic Program</h3>
-    <label>Base Program Length (months):<input type="number" id="bProgramLength" value="12" min="1"></label><br>
-    <label>Base Monthly Payment:<input type="number" id="bBaseMonthlyPayment" value="169" min="0"></label><br>
-    <label>Base Down Payment:<input type="number" id="bBaseDownPayment" value="199"></label><br>
-    <p>Total Basic Program Value: <span id="bTotalProgramValue"></span></p>
-    <hr>
-    <div id="basicDiscountsContainer"></div>
-</div>
+    <!-- Basic Program -->
+    <div class="container">
+        <h3>Basic Program</h3>
+        <label>Base Program Length (months):<input type="number" id="bProgramLength" value="12" min="1"></label><br>
+        <label>Base Monthly Payment:<input type="number" id="bBaseMonthlyPayment" value="169" min="0"></label><br>
+        <label>Base Down Payment:<input type="number" id="bBaseDownPayment" value="199"></label><br>
+        <p>Total Basic Program Value: <span id="bTotalProgramValue"></span></p>
+        <hr>
+        <div id="basicDiscountsContainer"></div>
+    </div>
+    <div class="buttonContainer">
+        <button onclick="saveSettings()">Save Settings</button>
+        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+    </div>
 
-<!-- Black Belt Club -->
-<div class="container" style="background-color: lightgray;">
-    <h3>Black Belt Club</h3>
-    <label>Base Program Length (months):<input type="number" id="bbcProgramLength" value="36" min="1"></label><br>
-    <label>Base Monthly Payment:<input type="number" id="bbcBaseMonthlyPayment" value="194" min="0"></label><br>
-    <label>Base Down Payment:<input type="number" id="bbcBaseDownPayment" value="249"></label><br>
-    <p>Total BBC Program Value: <span id="bbcTotalProgramValue"></span></p>
-    <hr>
-    <div id="bbcDiscountsContainer"></div>
-</div>
+    <!-- Black Belt Club -->
+    <div class="container" style="background-color: lightgray;">
+        <h3>Black Belt Club</h3>
+        <label>Base Program Length (months):<input type="number" id="bbcProgramLength" value="36" min="1"></label><br>
+        <label>Base Monthly Payment:<input type="number" id="bbcBaseMonthlyPayment" value="194" min="0"></label><br>
+        <label>Base Down Payment:<input type="number" id="bbcBaseDownPayment" value="249"></label><br>
+        <p>Total BBC Program Value: <span id="bbcTotalProgramValue"></span></p>
+        <hr>
+        <div id="bbcDiscountsContainer"></div>
+    </div>
+    <div class="buttonContainer">
+        <button onclick="saveSettings()">Save Settings</button>
+        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+    </div>
 
-<!-- Masters Club -->
-<div class="container" style="background-color: rgb(231, 145, 145);">
-    <h3>Masters Club</h3>
-    <label>Base Program Length (months):<input type="number" id="mcProgramLength" value="36" min="1"></label><br>
-    <label>Base Monthly Payment:<input type="number" id="mcBaseMonthlyPayment" value="219"></label><br>
-    <label>Base Down Payment:<input type="number" id="mcBaseDownPayment" value="299"></label><br>
-    <p>Total MC Program Value: <span id="mcTotalProgramValue"></span></p>
-    <hr>
-    <div id="mcDiscountsContainer"></div>
-</div>
+    <!-- Masters Club -->
+    <div class="container" style="background-color: rgb(231, 145, 145);">
+        <h3>Masters Club</h3>
+        <label>Base Program Length (months):<input type="number" id="mcProgramLength" value="36" min="1"></label><br>
+        <label>Base Monthly Payment:<input type="number" id="mcBaseMonthlyPayment" value="219"></label><br>
+        <label>Base Down Payment:<input type="number" id="mcBaseDownPayment" value="299"></label><br>
+        <p>Total MC Program Value: <span id="mcTotalProgramValue"></span></p>
+        <hr>
+        <div id="mcDiscountsContainer"></div>
+    </div>
 
 
     <div class="buttonContainer">
         <button onclick="saveSettings()">Save Settings</button>
         <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
     </div>
-    
-    
+   
 
     <footer>
         <p>&copy; 2023 All Rights Reserved</p>
