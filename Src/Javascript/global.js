@@ -1,3 +1,20 @@
+//Navbar switch for mobile
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.querySelector(".hamburger-menu");
+    const navbar = document.querySelector(".navbar");
+
+    if (hamburger && navbar) {
+        hamburger.addEventListener("click", function () {
+            navbar.classList.toggle("show");
+        });
+    } else {
+    }
+});
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Global settings loaded.");
 
