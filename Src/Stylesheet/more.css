@@ -25,60 +25,6 @@ span {
     color: #e90400;
 }
 
-ul {
-    display: flex; 
-    justify-content: flex-start; 
-    align-items: center;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-color: #333;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-}
-
-/* Push the last item (Settings) to the right */
-.settings-link {
-    margin-left: auto; 
-}
-
-li {
-    float: left;
-}
-a {
-    display: block;
-    padding: 8px;
-    background-color: #333;
-    text-decoration: none;
-}
-
-li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-
-li a:hover:not(.active) {
-    background-color: #111;
-}
-
-
-.nav-link.active {
-    background-color: #2196F3;
-}
-
-.nav-link {
-    color: #fff;
-    text-decoration: none;
-}
-
-
 .container {
     margin: 20px auto;
     max-width: 600px;
