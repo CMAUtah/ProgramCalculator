@@ -1,0 +1,88 @@
+/* Default Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+/* Navbar Links */
+.navbar li {
+    float: left;
+}
+
+.navbar a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #111;
+}
+
+.hamburger-menu {
+    display: none; /* Hidden by default on larger screens */
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+    /* Hide navbar initially */
+    .navbar {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: relative; /* Let it flow normally */
+        left: 0;
+        background-color: #333;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Show navbar when toggled */
+    .navbar.show {
+        display: flex;
+        padding-top: 0px; /* Moves everything down when open */
+    }
+
+    .navbar li {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Make sure the hamburger menu moves with the navbar */
+    .hamburger-menu {
+        display: block;
+        position: relative; /* Moves with navbar */
+        font-size: 30px;
+        cursor: pointer;
+        background-color: #707070;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 200;
+        margin-bottom: 5px; /* Ensures spacing between menu and navbar */
+        transition: margin 0.3s ease-in-out; /* Smooth movement */
+    }
+
+    .hamburger-menu:hover {
+        background-color: #494949;
+    }
+}
+
+.settings-link {
+    margin-left: auto; 
+}
+
+.nav-link.active {
+    background-color: #2196F3;
+}
