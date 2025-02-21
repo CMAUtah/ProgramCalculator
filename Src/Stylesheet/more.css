@@ -78,6 +78,7 @@ li a:hover:not(.active) {
     text-decoration: none;
 }
 
+
 .container {
     margin: 20px auto;
     max-width: 600px;
@@ -148,4 +149,76 @@ p {
 #timeLeft, #extendedTimeUsed, #oldEndDate, #newEndDate {
     font-weight: bold;
 }
+
+/* Style the dynamically generated input containers */
+.option-container {
+    padding: 1px 0;
+    margin-bottom: 1px;
+}
+
+/* Style input fields to look uniform */
+.discount-input, .downpayment-input {
+    display: block;
+    width: 100%;
+    max-width: 200px; /* Adjust width as needed */
+    padding: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+/* Separator between each section */
+.option-separator {
+    border: 0;
+    height: 2px;
+    background: #ccc; /* Light gray separator */
+    margin-top: 10px;
+}
+
+
+.buttonContainer {
+    display: flex;              /* Arrange button and message side by side */
+    justify-content: center;    /* Center the entire container horizontally */
+    align-items: center;        /* Align button and message vertically */
+    margin: 20px 0;             /* Add spacing above and below */
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #2196F3;
+    background-color: #2196F3;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #0056b3;  /* Darker blue on hover */
+    transform: scale(1.05);     /* Slight zoom effect on hover */
+}
+
+button:active {
+    background-color: #004494;  /* Even darker when clicked */
+    transform: scale(0.98);     /* Button press effect */
+}
+
+#savedMessage {
+    font-size: 16px;
+    margin-left: 15px;         /* Space between button and message */
+    color: green;
+    opacity: 0;                /* Hidden by default */
+    transition: opacity 0.5s ease-in-out;
+}
+
+.option-separator {
+    border: none;                 /* Remove all default borders */
+    border-top: 2px dotted #000;  /* Black dashed line */
+    color: transparent;           /* Ensure no color bleed from text or other styles */
+    background-color: transparent;/* Remove background color to prevent shading */
+    height: 0;                    /* Collapse any vertical space */
+    margin: 10px 0;               /* Adjust spacing */
+}
+
+
 
