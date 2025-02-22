@@ -7,6 +7,13 @@ body {
     overflow-x: hidden;
 }
 
+/* Decrease  main margin on smaller screens for more visibility */
+@media screen and (max-width: 768px) {
+    body{
+        margin:5px;
+    }
+}
+
 body > footer > p{
     text-align: center;
 }
