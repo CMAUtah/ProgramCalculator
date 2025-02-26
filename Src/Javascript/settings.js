@@ -84,7 +84,6 @@ function loadSettings() {
     generateDiscountInputs();
 }
 
-// Generalized Function to Dynamically Generate Discount Inputs for All Programs
 function generateDiscountInputs() {
     const programs = [
         { containerId: 'basicDiscountsContainer', prefix: 'basic' },
@@ -99,53 +98,76 @@ function generateDiscountInputs() {
         document.querySelectorAll('.settings input[type="checkbox"]').forEach((checkbox, index) => {
             if (checkbox.checked) {
                 const optionName = document.getElementById(`basicOption${index + 1}Name`).value;
+                const optionId = `${program.prefix}_omit_option_${index + 1}`; // Unique ID for omission
 
-                // Create wrapper for the inputs
+                // Create wrapper with flexbox
                 const optionWrapper = document.createElement('div');
                 optionWrapper.className = "option-container";
 
-                const isOption1 = index === 0;
+                // Left-side: Omit Checkbox & Label
+                const omitContainer = document.createElement('div');
+                omitContainer.className = "omit-container";
 
-                // Discount Label
+                const omitCheckbox = document.createElement('input');
+                omitCheckbox.type = "checkbox";
+                omitCheckbox.id = optionId;
+                omitCheckbox.checked = localStorage.getItem(optionId) === "true"; // Load state from localStorage
+
+                omitCheckbox.addEventListener('change', () => {
+                    localStorage.setItem(optionId, omitCheckbox.checked);
+                    generateDiscountInputs(); // Refresh display
+                });
+
+                const omitLabel = document.createElement('label');
+                omitLabel.innerHTML = "Omit"; // Creates a line break
+                omitLabel.setAttribute("for", optionId);                
+
+                omitContainer.appendChild(omitCheckbox);
+                omitContainer.appendChild(omitLabel);
+
+                // Right-side: Discount and Payment Inputs
+                const inputContainer = document.createElement('div');
+                inputContainer.className = "input-container";
+
                 const discountLabel = document.createElement('label');
-                discountLabel.innerHTML = isOption1 
-                    ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
-                    : `<strong>${optionName}</strong> Discount %`;
+                discountLabel.innerHTML = `<strong>${optionName}</strong> Discount %`;
 
-                // Discount Input
                 const discountInput = document.createElement('input');
                 discountInput.type = "number";
                 discountInput.id = `${program.prefix}_discount_${index + 1}`;
                 discountInput.value = localStorage.getItem(discountInput.id) || "";
                 discountInput.className = "discount-input";
 
-                // Payment Label
                 const paymentLabel = document.createElement('label');
-                paymentLabel.innerHTML = isOption1 
-                    ? `<strong>${optionName}</strong> Payment`
-                    : `<strong>${optionName}</strong> Downpayment`;
+                paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
 
-                // Payment Input
                 const paymentInput = document.createElement('input');
                 paymentInput.type = "number";
-                paymentInput.id = isOption1 
-                    ? `${program.prefix}_payment_${index + 1}` 
-                    : `${program.prefix}_downpayment_${index + 1}`;
+                paymentInput.id = `${program.prefix}_downpayment_${index + 1}`;
                 paymentInput.value = localStorage.getItem(paymentInput.id) || "";
                 paymentInput.className = "downpayment-input";
 
-                // Append to wrapper
-                optionWrapper.appendChild(discountLabel);
-                optionWrapper.appendChild(discountInput);
-                optionWrapper.appendChild(paymentLabel);
-                optionWrapper.appendChild(paymentInput);
+                // Hide inputs if omitted
+                if (!omitCheckbox.checked) {
+                    inputContainer.appendChild(discountLabel);
+                    inputContainer.appendChild(discountInput);
+                    inputContainer.appendChild(paymentLabel);
+                    inputContainer.appendChild(paymentInput);
+                }
 
-                // Add separator line
+                // Apply flex styling
+                optionWrapper.appendChild(omitContainer);
+                optionWrapper.appendChild(inputContainer);
+                // Append to container (before the separator)
+                container.appendChild(optionWrapper);
+
+                // Add separator line only if it's not the last element
                 const separator = document.createElement('hr');
                 separator.className = "option-separator";
-                optionWrapper.appendChild(separator);
+                container.appendChild(separator);
 
-                // Append to the program's container
+
+                // Append to container
                 container.appendChild(optionWrapper);
 
                 // Save values to localStorage on input change
@@ -158,6 +180,7 @@ function generateDiscountInputs() {
         });
     });
 }
+
 
 
 
