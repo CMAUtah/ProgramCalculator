@@ -57,12 +57,18 @@ span {
 .container {
     display: flex;
     flex-wrap: wrap;
-    max-width: 90%;
+    max-width: 90%; 
     margin: 0 auto;
-    justify-content: space-between; /* Distribute items evenly */
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Adjust the width and margin for each div */
+
+/* Default layout: Two equal-width containers */
 #main, #regularCalculator, #christmasEventCalculator {
     box-sizing: border-box;
     padding: 20px;
@@ -71,8 +77,24 @@ span {
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: calc(50% - 20px); /* Set the maximum width for each div to take up half the space */
+    width: calc(50% - 20px); /* Ensures equal width */
 }
+
+/* Stack containers on smaller screens */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack items */
+        align-items: center; /* Center them */
+    }
+
+    #main, #regularCalculator, #christmasEventCalculator {
+        width: 100%; /* Ensures both containers are full-width */
+        margin: 10px 0; /* Adjust margin for stacking */
+    }
+}
+
+
+
 
 /* Style for the iPhone-style toggle switch */
 .switch-container {
@@ -130,16 +152,6 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(26px);
 }
-
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 
 /* Make the "Program End Date" input wider */
 #programEndDate {
