@@ -110,6 +110,7 @@ function generateDiscountInputs() {
 
                 const omitCheckbox = document.createElement('input');
                 omitCheckbox.type = "checkbox";
+                omitCheckbox.checked
                 omitCheckbox.id = optionId;
                 omitCheckbox.checked = localStorage.getItem(optionId) === "true"; // Load state from localStorage
 
@@ -119,7 +120,6 @@ function generateDiscountInputs() {
                 });
 
                 const omitLabel = document.createElement('label');
-                omitLabel.innerHTML = "Omit"; // Creates a line break
                 omitLabel.setAttribute("for", optionId);                
 
                 omitContainer.appendChild(omitCheckbox);
@@ -151,7 +151,7 @@ function generateDiscountInputs() {
                 paymentInput.className = "downpayment-input";
 
                 // Hide inputs if omitted
-                if (!omitCheckbox.checked) {
+                if (omitCheckbox.checked) {
                     inputContainer.appendChild(discountLabel);
                     inputContainer.appendChild(discountInput);
                     inputContainer.appendChild(paymentLabel);
