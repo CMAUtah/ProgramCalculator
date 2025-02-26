@@ -129,8 +129,11 @@ function generateDiscountInputs() {
                 const inputContainer = document.createElement('div');
                 inputContainer.className = "input-container";
 
+                // Apply (Paid In Full) only for the first option
                 const discountLabel = document.createElement('label');
-                discountLabel.innerHTML = `<strong>${optionName}</strong> Discount %`;
+                discountLabel.innerHTML = index === 0 
+                    ? `<strong>${optionName}</strong> Discount (Paid In Full) %` 
+                    : `<strong>${optionName}</strong> Discount %`;
 
                 const discountInput = document.createElement('input');
                 discountInput.type = "number";
