@@ -188,3 +188,32 @@ button:active {
 
 
 
+.option-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.omit-container {
+    display: flex;
+    align-items: center;
+    flex: 0 0 70px; /* Fixed width for checkbox + label */
+}
+
+.omit-container input {
+    margin-right: 5px;
+}
+
+.input-container {
+    flex: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+}
+
+.box-info{
+    text-align: center;
+    font-style: italic;
+    padding: 0 10px;
+}
