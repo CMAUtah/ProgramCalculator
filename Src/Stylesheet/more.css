@@ -199,7 +199,7 @@ button:active {
 .omit-container {
     display: flex;
     align-items: center;
-    flex: 0 0 70px; /* Fixed width for checkbox + label */
+    flex: 0 0 40px; /* Fixed width for checkbox + label */
 }
 
 .omit-container input {
