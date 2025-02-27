@@ -110,10 +110,17 @@ function generateDiscountInputs() {
 
                 const omitCheckbox = document.createElement('input');
                 omitCheckbox.type = "checkbox";
-                omitCheckbox.checked
                 omitCheckbox.id = optionId;
-                omitCheckbox.checked = localStorage.getItem(optionId) === "true"; // Load state from localStorage
-
+                
+                // Check localStorage for saved state, default to checked if not found
+                omitCheckbox.checked = localStorage.getItem(optionId) === null ? true : localStorage.getItem(optionId) === "true";
+                
+                // Save state when checkbox is changed
+                omitCheckbox.addEventListener('change', () => {
+                    localStorage.setItem(optionId, omitCheckbox.checked);
+                    generateDiscountInputs(); // Refresh display
+                });
+                
                 omitCheckbox.addEventListener('change', () => {
                     localStorage.setItem(optionId, omitCheckbox.checked);
                     generateDiscountInputs(); // Refresh display
