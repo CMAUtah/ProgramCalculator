@@ -1,218 +1,136 @@
-function calculateProgramValues() {
-    const programs = [
-        { lengthId: "bProgramLength", paymentId: "bBaseMonthlyPayment", downId: "bBaseDownPayment", totalId: "bTotalProgramValue" },
-        { lengthId: "bbcProgramLength", paymentId: "bbcBaseMonthlyPayment", downId: "bbcBaseDownPayment", totalId: "bbcTotalProgramValue" },
-        { lengthId: "mcProgramLength", paymentId: "mcBaseMonthlyPayment", downId: "mcBaseDownPayment", totalId: "mcTotalProgramValue" }
-    ];
-
-    programs.forEach(program => {
-        const length = parseFloat(document.getElementById(program.lengthId).value) || 0;
-        const monthlyPayment = parseFloat(document.getElementById(program.paymentId).value) || 0;
-        const downPayment = parseFloat(document.getElementById(program.downId).value) || 0;
-        const totalValue = downPayment + (monthlyPayment * length);
-        document.getElementById(program.totalId).textContent = `$${totalValue.toFixed(2)}`;
-    });
-}
-
-
-function saveSettings() {
-    const settings = {
-        options: [...document.querySelectorAll('.settings input[type="checkbox"]')].map(input => ({
-            id: input.id,
-            enabled: input.checked
-        })),
-        names: [...document.querySelectorAll('.settings input[type="text"]')].map(input => ({
-            id: input.id,
-            value: input.value
-        })),
-        values: [...document.querySelectorAll('input[type="number"]')].map(input => ({
-            id: input.id,
-            value: input.value
-        }))
-    };
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Program Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="Stylesheet/more.css">
+    <link rel="stylesheet" type="text/css" href="Stylesheet/navbar.css">
+    <link rel="icon" type="image/x-icon" href="./images/calc.png">
+</head>
+<body>
+    <header>
+        <!-- Hamburger Icon -->
+        <div class="hamburger-menu">☰</div>
     
-    localStorage.setItem('calculatorSettings', JSON.stringify(settings));
+        <!-- Navigation Menu -->
+        <ul class="navbar">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="basic.html" class="nav-link">Basic</a></li>
+            <li><a href="bbc.html" class="nav-link">BBC</a></li>
+            <li><a href="mc.html" class="nav-link">MC</a></li>
+            <li><a href="more.html">More</a></li>
+            <li class="settings-link"><a href="settings.html" class="nav-link active">Settings ⚙</a></li>
+        </ul>
+        <h1 style="background-color: rgb(252, 177, 15); color: black;">
+            Settings
+        </h1>
+        <h3>This does absolutely nothing at the moment and is still under construction.</h3>
+    </header>
 
-    // Debug: Confirm settings are saved
-    console.log('Settings saved:', settings);
+    <div class="container settings">
+        <h3>Calculator Option Settings</h3>
+        <p><u>Shown options and names</u></p>
+        <label>
+            <input type="checkbox" id="option1Enabled" checked> Enable Option 1  (Paid In Full)
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption1Name" value="Option A">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="option2Enabled" checked> Enable Option 2
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption2Name" value="Option A-">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="option3Enabled" checked> Enable Option 3
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption3Name" value="Option B+">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="option4Enabled" checked> Enable Option 4
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption4Name" value="Option B">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="option5Enabled" checked> Enable Option 5
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption5Name" value="Option C">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="option6Enabled" checked> Enable Option 6
+        </label>
+        <label>
+            -- Name: <input type="text" id="basicOption6Name" value="Option D">
+        </label>
+    </div>
+    
+    <div class="buttonContainer">
+        <button onclick="saveSettings()">Save Settings</button>
+        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+    </div>
 
-    // Recalculate program values after saving
-    calculateProgramValues();
+    <!-- Basic Program -->
+    <div class="container">
+        <h3>Basic Program</h3>
+        <label>Base Program Length (months):<input type="number" id="bProgramLength" value="12" min="1"></label><br>
+        <label>Base Monthly Payment:<input type="number" id="bBaseMonthlyPayment" value="169" min="0"></label><br>
+        <label>Base Down Payment:<input type="number" id="bBaseDownPayment" value="199"></label><br>
+        <p>Total Basic Program Value: <span id="bTotalProgramValue"></span></p>
+        <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+        <div id="basicDiscountsContainer"></div>
+    </div>
+    <div class="buttonContainer">
+        <button onclick="saveSettings()">Save Settings</button>
+        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+    </div>
 
-    // Debug: Check if the function runs
-    console.log("Save Settings clicked!");
+    <!-- Black Belt Club -->
+    <div class="container" style="background-color: lightgray;">
+        <h3>Black Belt Club</h3>
+        <label>Base Program Length (months):<input type="number" id="bbcProgramLength" value="36" min="1"></label><br>
+        <label>Base Monthly Payment:<input type="number" id="bbcBaseMonthlyPayment" value="194" min="0"></label><br>
+        <label>Base Down Payment:<input type="number" id="bbcBaseDownPayment" value="249"></label><br>
+        <p>Total BBC Program Value: <span id="bbcTotalProgramValue"></span></p>
+        <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+        <div id="bbcDiscountsContainer"></div>
+    </div>
+    <div class="buttonContainer">
+        <button onclick="saveSettings()">Save Settings</button>
+        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+    </div>
 
-    // Show "Saved" message
-    const savedMessage = document.getElementById('savedMessage');
-    if (savedMessage) {
-        savedMessage.style.opacity = '1';
-        savedMessage.style.transition = 'opacity 0.5s ease-in-out';
-    } else {
-        console.error('Saved message element not found!');
-    }
-
-    // Fade out after 1.5 seconds
-    setTimeout(() => {
-        if (savedMessage) {
-            savedMessage.style.opacity = '0';
-        }
-    }, 1500);
-}
-
-
-
-function loadSettings() {
-    const savedSettings = JSON.parse(localStorage.getItem('calculatorSettings'));
-    if (!savedSettings) return;
-
-    savedSettings.options.forEach(setting => {
-        const input = document.getElementById(setting.id);
-        if (input) input.checked = setting.enabled;
-    });
-
-    savedSettings.names.forEach(setting => {
-        const input = document.getElementById(setting.id);
-        if (input) input.value = setting.value;
-    });
-
-    savedSettings.values.forEach(setting => {
-        const input = document.getElementById(setting.id);
-        if (input) input.value = setting.value;
-    });
-
-    // Generate discount/downpayment inputs based on loaded settings
-    generateDiscountInputs();
-}
-
-function generateDiscountInputs() {
-    const programs = [
-        { containerId: 'basicDiscountsContainer', prefix: 'basic' },
-        { containerId: 'bbcDiscountsContainer', prefix: 'bbc' },
-        { containerId: 'mcDiscountsContainer', prefix: 'mc' }
-    ];
-
-    programs.forEach(program => {
-        const container = document.getElementById(program.containerId);
-        container.innerHTML = ""; // Clear previous inputs
-
-        document.querySelectorAll('.settings input[type="checkbox"]').forEach((checkbox, index) => {
-            if (checkbox.checked) {
-                const optionName = document.getElementById(`basicOption${index + 1}Name`).value;
-                const optionId = `${program.prefix}_omit_option_${index + 1}`; // Unique ID for omission
-
-                // Create wrapper with flexbox
-                const optionWrapper = document.createElement('div');
-                optionWrapper.className = "option-container";
-
-                // Left-side: Omit Checkbox & Label
-                const omitContainer = document.createElement('div');
-                omitContainer.className = "omit-container";
-
-                const omitCheckbox = document.createElement('input');
-                omitCheckbox.type = "checkbox";
-                omitCheckbox.id = optionId;
-                
-                // Check localStorage for saved state, default to checked if not found
-                omitCheckbox.checked = localStorage.getItem(optionId) === null ? true : localStorage.getItem(optionId) === "true";
-                
-                // Save state when checkbox is changed
-                omitCheckbox.addEventListener('change', () => {
-                    localStorage.setItem(optionId, omitCheckbox.checked);
-                    generateDiscountInputs(); // Refresh display
-                });
-                
-                omitCheckbox.addEventListener('change', () => {
-                    localStorage.setItem(optionId, omitCheckbox.checked);
-                    generateDiscountInputs(); // Refresh display
-                });
-
-                const omitLabel = document.createElement('label');
-                omitLabel.setAttribute("for", optionId);                
-
-                omitContainer.appendChild(omitCheckbox);
-                omitContainer.appendChild(omitLabel);
-
-                // Right-side: Discount and Payment Inputs
-                const inputContainer = document.createElement('div');
-                inputContainer.className = "input-container";
-
-                // Apply (Paid In Full) only for the first option
-                const discountLabel = document.createElement('label');
-                discountLabel.innerHTML = index === 0 
-                    ? `<strong>${optionName}</strong> Discount (Paid In Full) %` 
-                    : `<strong>${optionName}</strong> Discount %`;
-
-                const discountInput = document.createElement('input');
-                discountInput.type = "number";
-                discountInput.id = `${program.prefix}_discount_${index + 1}`;
-                discountInput.value = localStorage.getItem(discountInput.id) || "";
-                discountInput.className = "discount-input";
-
-                const paymentLabel = document.createElement('label');
-                paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
-
-                const paymentInput = document.createElement('input');
-                paymentInput.type = "number";
-                paymentInput.id = `${program.prefix}_downpayment_${index + 1}`;
-                paymentInput.value = localStorage.getItem(paymentInput.id) || "";
-                paymentInput.className = "downpayment-input";
-
-                // Hide inputs if omitted
-                if (omitCheckbox.checked) {
-                    inputContainer.appendChild(discountLabel);
-                    inputContainer.appendChild(discountInput);
-                    inputContainer.appendChild(paymentLabel);
-                    inputContainer.appendChild(paymentInput);
-                }
-
-                // Apply flex styling
-                optionWrapper.appendChild(omitContainer);
-                optionWrapper.appendChild(inputContainer);
-                // Append to container (before the separator)
-                container.appendChild(optionWrapper);
-
-                // Add separator line only if it's not the last element
-                const separator = document.createElement('hr');
-                separator.className = "option-separator";
-                container.appendChild(separator);
+    <!-- Masters Club -->
+    <div class="container" style="background-color: rgb(231, 145, 145);">
+        <h3>Masters Club</h3>
+        <label>Base Program Length (months):<input type="number" id="mcProgramLength" value="36" min="1"></label><br>
+        <label>Base Monthly Payment:<input type="number" id="mcBaseMonthlyPayment" value="219"></label><br>
+        <label>Base Down Payment:<input type="number" id="mcBaseDownPayment" value="299"></label><br>
+        <p>Total MC Program Value: <span id="mcTotalProgramValue"></span></p>
+        <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+        <div id="mcDiscountsContainer"></div>
+    </div>
 
 
-                // Append to container
-                container.appendChild(optionWrapper);
+    <div class="buttonContainer">
+        <button onclick="saveSettings()">Save Settings</button>
+        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+    </div>
+   
 
-                // Save values to localStorage on input change
-                [discountInput, paymentInput].forEach(input => {
-                    input.addEventListener('input', () => {
-                        localStorage.setItem(input.id, input.value);
-                    });
-                });
-            }
-        });
-    });
-}
-
-
-
-
-
-
-// Attach event listeners to checkboxes to dynamically update inputs
-document.querySelectorAll('.settings input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', generateDiscountInputs);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadSettings();
-    generateDiscountInputs(); // Run on page load
-
-    // Only run calculations if on the settings page
-    if (document.getElementById('bTotalProgramValue')) {
-       calculateProgramValues();
-
-        // Attach event listeners to recalculate on input change
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', calculateProgramValues);
-        });
-    }
-});
-
+    <footer>
+        <p>&copy; 2023 All Rights Reserved</p>
+    </footer>
+    <script src="Javascript/global.js"></script>
+    <script src="Javascript/settings.js"></script>
+</body>
+</html>
