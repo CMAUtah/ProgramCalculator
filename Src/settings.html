@@ -25,105 +25,120 @@
         <h1 style="background-color: rgb(252, 177, 15); color: black;">
             Settings
         </h1>
+        <ul class="subNav">
+            <li><button class="subNav-button" data-target="section1">Pricing</button></li>
+            <li><button class="subNav-button" data-target="section2">Holiday Event</button></li>
+            <li><button class="subNav-button" data-target="section3">Undetermined</button></li>
+        </ul>
         <h3>This does absolutely nothing at the moment and is still under construction.</h3>
     </header>
 
-    <div class="container settings">
-        <h3>Calculator Option Settings</h3>
-        <p><u>Shown options and names</u></p>
-        <label>
-            <input type="checkbox" id="option1Enabled" checked> Enable Option 1  (Paid In Full)
-        </label>
-        <label>
-            -- Name: <input type="text" id="basicOption1Name" value="Option A">
-        </label>
-        <br>
-        <label>
-            <input type="checkbox" id="option2Enabled" checked> Enable Option 2
-        </label>
-        <label>
-            -- Name: <input type="text" id="basicOption2Name" value="Option A-">
-        </label>
-        <br>
-        <label>
-            <input type="checkbox" id="option3Enabled" checked> Enable Option 3
-        </label>
-        <label>
-            -- Name: <input type="text" id="basicOption3Name" value="Option B+">
-        </label>
-        <br>
-        <label>
-            <input type="checkbox" id="option4Enabled" checked> Enable Option 4
-        </label>
-        <label>
-            -- Name: <input type="text" id="basicOption4Name" value="Option B">
-        </label>
-        <br>
-        <label>
-            <input type="checkbox" id="option5Enabled" checked> Enable Option 5
-        </label>
-        <label>
-            -- Name: <input type="text" id="basicOption5Name" value="Option C">
-        </label>
-        <br>
-        <label>
-            <input type="checkbox" id="option6Enabled" checked> Enable Option 6
-        </label>
-        <label>
-            -- Name: <input type="text" id="basicOption6Name" value="Option D">
-        </label>
-    </div>
-    
-    <div class="buttonContainer">
-        <button onclick="saveSettings()">Save Settings</button>
-        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
-    </div>
+    <div id="section1" class="content-section">
+        <div class="container settings">
+            <h3>Calculator Option Settings</h3>
+            <p><u>Shown options and names</u></p>
+            <label>
+                <input type="checkbox" id="option1Enabled" checked> Enable Option 1  (Paid In Full)
+            </label>
+            <label>
+                -- Name: <input type="text" id="basicOption1Name" value="Option A">
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="option2Enabled" checked> Enable Option 2
+            </label>
+            <label>
+                -- Name: <input type="text" id="basicOption2Name" value="Option A-">
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="option3Enabled" checked> Enable Option 3
+            </label>
+            <label>
+                -- Name: <input type="text" id="basicOption3Name" value="Option B+">
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="option4Enabled" checked> Enable Option 4
+            </label>
+            <label>
+                -- Name: <input type="text" id="basicOption4Name" value="Option B">
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="option5Enabled" checked> Enable Option 5
+            </label>
+            <label>
+                -- Name: <input type="text" id="basicOption5Name" value="Option C">
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="option6Enabled" checked> Enable Option 6
+            </label>
+            <label>
+                -- Name: <input type="text" id="basicOption6Name" value="Option D">
+            </label>
+        </div>
+        
+        <div class="buttonContainer">
+            <button onclick="saveSettings()">Save Settings</button>
+            <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+        </div>
 
-    <!-- Basic Program -->
-    <div class="container">
-        <h3>Basic Program</h3>
-        <label>Base Program Length (months):<input type="number" id="bProgramLength" value="12" min="1"></label><br>
-        <label>Base Monthly Payment:<input type="number" id="bBaseMonthlyPayment" value="169" min="0"></label><br>
-        <label>Base Down Payment:<input type="number" id="bBaseDownPayment" value="199"></label><br>
-        <p>Total Basic Program Value: <span id="bTotalProgramValue"></span></p>
-        <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-        <div id="basicDiscountsContainer"></div>
-    </div>
-    <div class="buttonContainer">
-        <button onclick="saveSettings()">Save Settings</button>
-        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
-    </div>
+        <!-- Basic Program -->
+        <div class="container">
+            <h3>Basic Program</h3>
+            <label>Base Program Length (months):<input type="number" id="bProgramLength" value="12" min="1"></label><br>
+            <label>Base Monthly Payment:<input type="number" id="bBaseMonthlyPayment" value="169" min="0"></label><br>
+            <label>Base Down Payment:<input type="number" id="bBaseDownPayment" value="199"></label><br>
+            <p>Total Basic Program Value: <span id="bTotalProgramValue"></span></p>
+            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+            <div id="basicDiscountsContainer"></div>
+        </div>
+        <div class="buttonContainer">
+            <button onclick="saveSettings()">Save Settings</button>
+            <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+        </div>
 
-    <!-- Black Belt Club -->
-    <div class="container" style="background-color: lightgray;">
-        <h3>Black Belt Club</h3>
-        <label>Base Program Length (months):<input type="number" id="bbcProgramLength" value="36" min="1"></label><br>
-        <label>Base Monthly Payment:<input type="number" id="bbcBaseMonthlyPayment" value="194" min="0"></label><br>
-        <label>Base Down Payment:<input type="number" id="bbcBaseDownPayment" value="249"></label><br>
-        <p>Total BBC Program Value: <span id="bbcTotalProgramValue"></span></p>
-        <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-        <div id="bbcDiscountsContainer"></div>
-    </div>
-    <div class="buttonContainer">
-        <button onclick="saveSettings()">Save Settings</button>
-        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
-    </div>
+        <!-- Black Belt Club -->
+        <div class="container" style="background-color: lightgray;">
+            <h3>Black Belt Club</h3>
+            <label>Base Program Length (months):<input type="number" id="bbcProgramLength" value="36" min="1"></label><br>
+            <label>Base Monthly Payment:<input type="number" id="bbcBaseMonthlyPayment" value="194" min="0"></label><br>
+            <label>Base Down Payment:<input type="number" id="bbcBaseDownPayment" value="249"></label><br>
+            <p>Total BBC Program Value: <span id="bbcTotalProgramValue"></span></p>
+            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+            <div id="bbcDiscountsContainer"></div>
+        </div>
+        <div class="buttonContainer">
+            <button onclick="saveSettings()">Save Settings</button>
+            <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+        </div>
 
-    <!-- Masters Club -->
-    <div class="container" style="background-color: rgb(231, 145, 145);">
-        <h3>Masters Club</h3>
-        <label>Base Program Length (months):<input type="number" id="mcProgramLength" value="36" min="1"></label><br>
-        <label>Base Monthly Payment:<input type="number" id="mcBaseMonthlyPayment" value="219"></label><br>
-        <label>Base Down Payment:<input type="number" id="mcBaseDownPayment" value="299"></label><br>
-        <p>Total MC Program Value: <span id="mcTotalProgramValue"></span></p>
-        <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-        <div id="mcDiscountsContainer"></div>
+        <!-- Masters Club -->
+        <div class="container" style="background-color: rgb(231, 145, 145);">
+            <h3>Masters Club</h3>
+            <label>Base Program Length (months):<input type="number" id="mcProgramLength" value="36" min="1"></label><br>
+            <label>Base Monthly Payment:<input type="number" id="mcBaseMonthlyPayment" value="219"></label><br>
+            <label>Base Down Payment:<input type="number" id="mcBaseDownPayment" value="299"></label><br>
+            <p>Total MC Program Value: <span id="mcTotalProgramValue"></span></p>
+            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+            <div id="mcDiscountsContainer"></div>
+        </div>
+
+
+        <div class="buttonContainer">
+            <button onclick="saveSettings()">Save Settings</button>
+            <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+        </div>
     </div>
-
-
-    <div class="buttonContainer">
-        <button onclick="saveSettings()">Save Settings</button>
-        <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+    <!-- ---------------------------------------------------------------------------------------------- -->
+    <div id="section2" class="content-section hidden">
+        Holiday Sales
+    </div>
+    <!-- ---------------------------------------------------------------------------------------------- -->
+    <div id="section3" class="content-section hidden">
+        ??
     </div>
    
 
