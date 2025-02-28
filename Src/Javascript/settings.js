@@ -192,10 +192,6 @@ function generateDiscountInputs() {
 }
 
 
-
-
-
-
 // Attach event listeners to checkboxes to dynamically update inputs
 document.querySelectorAll('.settings input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', generateDiscountInputs);
@@ -215,4 +211,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".subNav-button");
+    const sections = document.querySelectorAll(".content-section");
+
+    // Set Section 1 and its button as the default active elements
+    document.getElementById("section1").classList.add("active");
+    document.querySelector('[data-target="section1"]').classList.add("active");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", function () {
+            const target = this.getAttribute("data-target");
+
+            // Hide all sections
+            sections.forEach(section => section.classList.remove("active"));
+
+            // Show the selected section
+            document.getElementById(target).classList.add("active");
+
+            // Remove active class from all buttons
+            buttons.forEach(btn => btn.classList.remove("active"));
+
+            // Add active class to the clicked button
+            this.classList.add("active");
+        });
+    });
+});
+
 
