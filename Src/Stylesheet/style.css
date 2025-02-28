@@ -101,6 +101,7 @@ span {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    max-width: 250px;
 }
 
 .event-label {
