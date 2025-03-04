@@ -147,6 +147,24 @@ function generateDiscountInputs() {
                 discountInput.id = `${program.prefix}_discount_${index + 1}`;
                 discountInput.value = localStorage.getItem(discountInput.id) || "";
                 discountInput.className = "discount-input";
+                discountInput.min = 0;  // Set minimum value to 0
+                discountInput.max = 100; // Set maximum value to 100
+
+                // Enforce min/max on input change
+                discountInput.addEventListener('input', () => {
+                    let value = parseFloat(discountInput.value);
+                    
+                    if (isNaN(value)) {
+                        value = 0;
+                    } else if (value < 0) {
+                        value = 0;
+                    } else if (value > 100) {
+                        value = 100;
+                    }
+                    
+                    discountInput.value = value;
+                    localStorage.setItem(discountInput.id, value);
+                });
 
                 const paymentLabel = document.createElement('label');
                 paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
