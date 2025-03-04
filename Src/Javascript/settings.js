@@ -28,30 +28,28 @@ function saveSettings() {
         values: [...document.querySelectorAll('input[type="number"]')].map(input => ({
             id: input.id,
             value: input.value
-        }))
+        })),
+        section2Values: {}  // Store Section 2 inputs separately
     };
-    
+
+    // Save Section 2 (Holiday Sale) inputs
+    document.querySelectorAll('#section2 input').forEach(input => {
+        settings.section2Values[input.id] = input.type === "checkbox" ? input.checked : input.value;
+    });
+
     localStorage.setItem('calculatorSettings', JSON.stringify(settings));
 
-    // Debug: Confirm settings are saved
-    console.log('Settings saved:', settings);
+    console.log("Settings saved:", settings);
 
-    // Recalculate program values after saving
     calculateProgramValues();
-
-    // Debug: Check if the function runs
-    console.log("Save Settings clicked!");
 
     // Show "Saved" message
     const savedMessage = document.getElementById('savedMessage');
     if (savedMessage) {
         savedMessage.style.opacity = '1';
         savedMessage.style.transition = 'opacity 0.5s ease-in-out';
-    } else {
-        console.error('Saved message element not found!');
     }
 
-    // Fade out after 1.5 seconds
     setTimeout(() => {
         if (savedMessage) {
             savedMessage.style.opacity = '0';
@@ -61,28 +59,51 @@ function saveSettings() {
 
 
 
-function loadSettings() {
+
+function loadSettings(reloadSection2 = false) {
     const savedSettings = JSON.parse(localStorage.getItem('calculatorSettings'));
     if (!savedSettings) return;
 
-    savedSettings.options.forEach(setting => {
-        const input = document.getElementById(setting.id);
-        if (input) input.checked = setting.enabled;
-    });
+    // Load standard checkboxes and text inputs (only if NOT reloading Section 2)
+    if (!reloadSection2) {
+        savedSettings.options.forEach(setting => {
+            const input = document.getElementById(setting.id);
+            if (input) input.checked = setting.enabled;
+        });
 
-    savedSettings.names.forEach(setting => {
-        const input = document.getElementById(setting.id);
-        if (input) input.value = setting.value;
-    });
+        savedSettings.names.forEach(setting => {
+            const input = document.getElementById(setting.id);
+            if (input) input.value = setting.value;
+        });
 
-    savedSettings.values.forEach(setting => {
-        const input = document.getElementById(setting.id);
-        if (input) input.value = setting.value;
-    });
+        savedSettings.values.forEach(setting => {
+            const input = document.getElementById(setting.id);
+            if (input) input.value = setting.value;
+        });
 
-    // Generate discount/downpayment inputs based on loaded settings
-    generateDiscountInputs();
+        generateDiscountInputs(); // Load dynamically generated inputs
+    }
+
+    // Load Section 2 settings after ensuring the DOM is ready
+    setTimeout(() => {
+        if (savedSettings.section2Values) {
+            Object.keys(savedSettings.section2Values).forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    if (input.type === "checkbox") {
+                        input.checked = savedSettings.section2Values[id];
+                    } else {
+                        input.value = savedSettings.section2Values[id];
+                    }
+                }
+            });
+        }
+    }, 100); // Ensure Section 2 elements exist
+
+    console.log(`Settings ${reloadSection2 ? "for Section 2" : "fully"} loaded successfully!`);
 }
+
+
 
 function generateDiscountInputs() {
     const programs = [
