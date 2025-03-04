@@ -139,45 +139,46 @@
             <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
 
             <div class="percent-container">
-                <input type="number" class="percent-input" value="25">
+                <input type="number" id="settingsBasicHolidayDiscount" class="percent-input" value="25" min="0" max="100">
             </div> Discount
             
-                <!-- Option 1 (program) -->
-                <div>
-                    <input type="checkbox" checked>
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 2 (program)-->
-                <div>
-                    <input type="checkbox" checked>
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 3 (program)-->
-                <div>
-                    <input type="checkbox" checked>
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 4 (program)-->
-                <div>
-                    <input type="checkbox" checked>
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-                <br>
-                <!-- Option 1 (extention) -->
-                <div>
-                    <input type="checkbox">
-                    <input class="discountInput" type="number" value="18"> Month Extention
-                </div>
-
-                <!-- Option 2 (extention)-->
-                <div>
-                    <input type="checkbox">
-                    <input type="number" value="24"> Month Extention
-                </div>
-
+            <!-- Option 1 (program) -->
+            <div>
+                <input type="checkbox" id="settingsBasicHolidayOption1" checked>
+                <input id="settingsBasicHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 2 (program) -->
+            <div>
+                <input type="checkbox" id="settingsBasicHolidayOption2" checked>
+                <input id="settingsBasicHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 3 (program) -->
+            <div>
+                <input type="checkbox" id="settingsBasicHolidayOption3" checked>
+                <input id="settingsBasicHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 4 (program) -->
+            <div>
+                <input type="checkbox" id="settingsBasicHolidayOption4" checked>
+                <input id="settingsBasicHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            <br>
+            
+            <!-- Option 1 (extension) -->
+            <div>
+                <input type="checkbox" id="settingsBasicHolidayExtension1">
+                <input id="settingsBasicHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
+            </div>
+            
+            <!-- Option 2 (extension) -->
+            <div>
+                <input type="checkbox" id="settingsBasicHolidayExtension2">
+                <input id="settingsBasicHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
+            </div>
+            
             </div>
         <div class="buttonContainer">
             <button onclick="saveSettings()">Save Settings</button>
@@ -187,44 +188,45 @@
             <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
 
             <div class="percent-container">
-                <input type="number" class="percent-input" value="25">
+                <input type="number" id="settingsBBCHolidayDiscount" class="percent-input" value="25" min="0" max="100">
             </div> Discount
             
-                <!-- Option 1 (program) -->
-                <div>
-                    <input type="checkbox" checked>
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 2 (program)-->
-                <div>
-                    <input type="checkbox">
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 3 (program)-->
-                <div>
-                    <input type="checkbox">
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 4 (program)-->
-                <div>
-                    <input type="checkbox">
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-                <br>
-                <!-- Option 1 (extention) -->
-                <div>
-                    <input type="checkbox" checked>
-                    <input class="discountInput" type="number" value="18"> Month Extention
-                </div>
-
-                <!-- Option 2 (extention)-->
-                <div>
-                    <input type="checkbox" checked>
-                    <input type="number" value="24"> Month Extention
-                </div>
+            <!-- Option 1 (program) -->
+            <div>
+                <input type="checkbox" id="settingsBBCHolidayOption1" checked>
+                <input id="settingsBBCHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 2 (program) -->
+            <div>
+                <input type="checkbox" id="settingsBBCHolidayOption2">
+                <input id="settingsBBCHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 3 (program) -->
+            <div>
+                <input type="checkbox" id="settingsBBCHolidayOption3">
+                <input id="settingsBBCHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 4 (program) -->
+            <div>
+                <input type="checkbox" id="settingsBBCasicHolidayOption4">
+                <input id="settingsBBCHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            <br>
+            
+            <!-- Option 1 (extension) -->
+            <div>
+                <input type="checkbox" id="settingsBBCHolidayExtension1" checked>
+                <input id="settingsBBCHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
+            </div>
+            
+            <!-- Option 2 (extension) -->
+            <div>
+                <input type="checkbox" id="settingsBBCHolidayExtension2" checked>
+                <input id="settingsBBCHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
+            </div>
 
             </div>
         <div class="buttonContainer">
@@ -235,44 +237,45 @@
             <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
 
             <div class="percent-container">
-                <input type="number" class="percent-input" value="25">
+                <input type="number" id="settingsMCHolidayDiscount" class="percent-input" value="25" min="0" max="100">
             </div> Discount
             
-                <!-- Option 1 (program) -->
-                <div>
-                    <input type="checkbox" checked>
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 2 (program)-->
-                <div>
-                    <input type="checkbox">
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 3 (program)-->
-                <div>
-                    <input type="checkbox">
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-
-                <!-- Option 4 (program)-->
-                <div>
-                    <input type="checkbox">
-                    <input class="discountInput" type="number"> Month Program
-                </div>
-                <br>
-                <!-- Option 1 (extention) -->
-                <div>
-                    <input type="checkbox" checked>
-                    <input class="discountInput" type="number" value="18"> Month Extention
-                </div>
-
-                <!-- Option 2 (extention)-->
-                <div>
-                    <input type="checkbox" checked>
-                    <input type="number" value="24"> Month Extention
-                </div>
+            <!-- Option 1 (program) -->
+            <div>
+                <input type="checkbox" id="settingsMCHolidayOption1" checked>
+                <input id="settingsMCHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 2 (program) -->
+            <div>
+                <input type="checkbox" id="settingsMCHolidayOption2">
+                <input id="settingsMCHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 3 (program) -->
+            <div>
+                <input type="checkbox" id="settingsMCHolidayOption3">
+                <input id="settingsMCHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            
+            <!-- Option 4 (program) -->
+            <div>
+                <input type="checkbox" id="settingsMCasicHolidayOption4">
+                <input id="settingsMCHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
+            </div>
+            <br>
+            
+            <!-- Option 1 (extension) -->
+            <div>
+                <input type="checkbox" id="settingsMCHolidayExtension1" checked>
+                <input id="settingsMCHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
+            </div>
+            
+            <!-- Option 2 (extension) -->
+            <div>
+                <input type="checkbox" id="settingsMCHolidayExtension2" checked>
+                <input id="settingsMCHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
+            </div>
 
             </div>
         <div class="buttonContainer">
