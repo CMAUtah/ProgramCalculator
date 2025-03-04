@@ -139,7 +139,7 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    border: 2px solid #2196F3;
+    border: none;
     background-color: #2196F3;
     color: white;
     border-radius: 5px;
@@ -161,20 +161,20 @@ button:active {
     color: green;
     opacity: 0; /* Initially hidden */
     transition: opacity 0.5s ease-in-out;
-    
-    /* Positioning */
+
+    /* Position it at the bottom right of the screen */
     position: fixed;
     bottom: 10px;
     right: 10px;
-    margin-left: 0; /* No need for left margin */
-    
+
     /* Ensure it's on top of everything */
     z-index: 9999;
-    background: rgba(255, 255, 255, 0.8); /* Optional: Adds background to make it readable */
+    background: rgba(255, 255, 255, 0.8);
     box-shadow: 5px 5px 5px grey;
-    padding: 5px 10px; /* Optional: Adds padding for better appearance */
-    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px 10px;
+    border-radius: 5px;
 }
+
 
 
 .option-separator {
@@ -185,7 +185,6 @@ button:active {
     height: 0;                    /* Collapse any vertical space */
     margin: 10px 0;               /* Adjust spacing */
 }
-
 
 
 .option-container {
@@ -216,4 +215,30 @@ button:active {
     text-align: center;
     font-style: italic;
     padding: 0 10px;
+}
+
+#section2 input[type="number"]{
+    width: 60px;
+}
+
+.percent-input {
+    width: 60px;
+    text-align: left;
+    position: relative;
+}
+
+/* Wrap input inside a container for % sign */
+.percent-container {
+    position: relative;
+    display: inline-block;
+}
+
+.percent-container::after {
+    content: "%";
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555; /* Adjust color if needed */
+    pointer-events: none;
 }
