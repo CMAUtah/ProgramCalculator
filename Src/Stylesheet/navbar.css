@@ -86,6 +86,7 @@
 .nav-link.active {
     background-color: #2196F3;
 }
+
 /* -------------------------------------------------------------------------- */
 .subNav {
     display: flex;
@@ -136,4 +137,53 @@
 
 .subNav-button:hover {
     background: #555;
+}
+/* -------------------------------------------------------------------- */
+/* Style for the tooltip container */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style for the question mark in a circle */
+.tooltip-container .tooltip-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-color: #3498db;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 24px;
+    cursor: help;
+    position: relative; /* Added for Chrome compatibility */
+}
+
+.tooltip-container .mcTip {
+    background-color: #495863;
+}
+
+
+/* Style for the tooltip text */
+.tooltip-container .tooltip-text {
+    visibility: hidden;
+    width: 150px;
+    font-size: 1rem;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }
