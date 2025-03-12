@@ -126,9 +126,6 @@ function calculateCredit() {
         amountPaidInput2 = 0;
     }
     
-    console.log(amountPaidInput1);
-    console.log(amountPaidInput2);
-    
 
     const amountPaid = amountPaidInput1 + amountPaidInput2;
     const programEndDateInput = document.getElementById('programEndDate').value.trim();
@@ -389,13 +386,6 @@ function calculateOption4() {
 function calculateOption4Basic() {
     calculateHolidayOption('Four', true);
 }
-
-
-
-
-
-
-
 
 
 function copyToClipboard(elementId, parseBasic = false) {
