@@ -236,3 +236,20 @@ input:checked + .slider:before {
     border-radius: 50%;
     cursor: pointer;
 }
+
+
+.metallic {
+    background: linear-gradient(
+        45deg,
+        #ffeb99 5%,   /* Light Gold */
+        #fff5cc 10%,  /* Soft Gold */
+        #e6c200 30%,  /* Rich Gold */
+        #d4af37 50%,  /* Classic Gold */
+        #e6c200 70%,  /* Rich Gold */
+        #fff5cc 80%,  /* Soft Gold */
+        #b8860b 95%   /* Deep Gold */
+  );
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
