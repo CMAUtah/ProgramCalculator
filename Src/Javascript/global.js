@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+window.onload = function() {
+    document.getElementById("content").style.visibility = "visible";
+}
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -47,3 +50,4 @@ function applyGeneralSettings(settings) {
         if (input) input.value = setting.value;
     });
 }
+
