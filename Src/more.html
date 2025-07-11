@@ -27,8 +27,10 @@
         </ul>
     </header>
     <h1>Extended Time Calculator</h1>
+
     <div class="container">
-        <p><label for="programEndDate">Current Program End Date (mm/dd/yyyy): <input type="text" id="programEndDate"></label></p>
+    <div id="warningBanner" style="display:none; background: #ffeeba; color: #856404; padding: 10px; margin-bottom: 10px; border: 1px solid #ffeeba; border-radius: 5px;"></div>
+        <p><label for="programEndDate">Current Program End Date (mm/dd/yyyy): <input type="text" id="programEndDate" placeholder="mm/dd/yyyy"></label></p>
         <p><label for="returnDate">Proposed Return Date: <input type="date" id="returnDate"></label></p>
         <p><label for="dateFrom">Date Of Leave (If Not Today): <input type="date" id="dateFrom">
             <span class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">
@@ -39,6 +41,16 @@
         <p>Old End Date: <span id="oldEndDate">-</span></p>
         <p>New End Date: <span id="newEndDate">-</span></p>
         <button onclick="copyText()">Copy</button>
+    </div>
+
+    <div class="container" style="width: 350px;">
+        <h3>Copy button will paste the text below</h3>
+        <p>Extended Time Reason:</p>
+        <p>Dates Gone:{date} - {date}</p>
+        <br>
+        <p>Time Extended: {# of days} days</p>
+        <p>Old End Date: {date}</p>
+        <p>New End Date: {date}</p>
     </div>
     
     <footer>
