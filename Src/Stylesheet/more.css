@@ -212,3 +212,9 @@ button:active {
     color: #555; /* Adjust color if needed */
     pointer-events: none;
 }
+
+.disabled-label {
+    font-style: italic;
+    color: #888;
+    margin-bottom: 0.5em;
+}
