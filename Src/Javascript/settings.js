@@ -35,8 +35,18 @@ function saveSettings() {
         settings.section2Values[input.id] = input.type === "checkbox" ? input.checked : input.value;
     });
 
-    localStorage.setItem('calculatorSettings', JSON.stringify(settings));
-    console.log("Settings saved:", settings);
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        localStorage.setItem('calculatorSettings', JSON.stringify(settings));
+        console.log("Settings saved locally:", settings);
+        return;
+    }
+
+    localStorage.setItem('calculatorSettings', JSON.stringify(settings)); // Optional fallback
+    db.collection("userSettings").doc(user.uid).set(settings)
+        .then(() => console.log("Settings saved to Firestore"))
+        .catch((err) => console.error("Firestore save failed:", err));
+
     calculateProgramValues();
 
     const savedMessage = document.getElementById('savedMessage');
@@ -50,60 +60,114 @@ function saveSettings() {
     }, 1500);
 }
 
+
 function loadSettings(reloadSection2 = false) {
-    const savedSettings = JSON.parse(localStorage.getItem('calculatorSettings'));
-    if (!savedSettings) return;
+    const user = firebase.auth().currentUser;
 
-    if (!reloadSection2) {
-        savedSettings.options.forEach(setting => {
-            const input = document.getElementById(setting.id);
-            if (input) input.checked = setting.enabled;
-        });
+    const applySettings = (savedSettings) => {
+        if (!savedSettings) return;
 
-        savedSettings.names.forEach(setting => {
-            const input = document.getElementById(setting.id);
-            if (input) input.value = setting.value;
-        });
-
-        savedSettings.values.forEach(setting => {
-            const input = document.getElementById(setting.id);
-            if (input) input.value = setting.value;
-        });
-
-        generateDiscountInputs();
-    }
-
-    setTimeout(() => {
-        if (savedSettings.section2Values) {
-            Object.keys(savedSettings.section2Values).forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.type === "checkbox"
-                        ? input.checked = savedSettings.section2Values[id]
-                        : input.value = savedSettings.section2Values[id];
-                }
+        if (!reloadSection2) {
+            savedSettings.options?.forEach(setting => {
+                const input = document.getElementById(setting.id);
+                if (input) input.checked = setting.enabled;
             });
-        }
-    }, 100);
 
-    console.log(`Settings ${reloadSection2 ? "for Section 2" : "fully"} loaded successfully!`);
+            savedSettings.names?.forEach(setting => {
+                const input = document.getElementById(setting.id);
+                if (input) input.value = setting.value;
+            });
+
+            savedSettings.values?.forEach(setting => {
+                const input = document.getElementById(setting.id);
+                if (input) input.value = setting.value;
+            });
+
+            generateDiscountInputs();
+        }
+
+        setTimeout(() => {
+            if (savedSettings.section2Values) {
+                Object.keys(savedSettings.section2Values).forEach(id => {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        input.type === "checkbox"
+                            ? input.checked = savedSettings.section2Values[id]
+                            : input.value = savedSettings.section2Values[id];
+                    }
+                });
+            }
+        }, 100);
+
+        console.log(`Settings ${reloadSection2 ? "for Section 2" : "fully"} loaded successfully!`);
+    };
+
+    if (user) {
+        db.collection("userSettings").doc(user.uid).get()
+            .then(doc => {
+                if (doc.exists) {
+                    applySettings(doc.data());
+                } else {
+                    console.log("No Firestore settings found. Falling back to localStorage.");
+                    const localSettings = JSON.parse(localStorage.getItem('calculatorSettings'));
+                    applySettings(localSettings);
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching Firestore settings:", err);
+                const localSettings = JSON.parse(localStorage.getItem('calculatorSettings'));
+                applySettings(localSettings);
+            });
+    } else {
+        const localSettings = JSON.parse(localStorage.getItem('calculatorSettings'));
+        applySettings(localSettings);
+    }
 }
 
+
 function generateDiscountInputs() {
+    const user = firebase.auth().currentUser;
+    const useFirestore = !!user;
+
     const programs = [
         { containerId: 'basicDiscountsContainer', prefix: 'basic' },
         { containerId: 'bbcDiscountsContainer', prefix: 'bbc' },
         { containerId: 'mcDiscountsContainer', prefix: 'mc' }
     ];
 
+    const getStoredValue = async (key) => {
+        if (!useFirestore) {
+            return localStorage.getItem(key);
+        }
+        try {
+            const doc = await db.collection("userSettings").doc(user.uid).get();
+            return doc.exists && doc.data()?.firestoreValues?.[key];
+        } catch (err) {
+            console.error("Failed to load value from Firestore:", err);
+            return null;
+        }
+    };
+
+    const setStoredValue = (key, value) => {
+        if (!useFirestore) {
+            localStorage.setItem(key, value);
+        } else {
+            db.collection("userSettings").doc(user.uid).set({
+                firestoreValues: { [key]: value }
+            }, { merge: true });
+        }
+    };
+
     programs.forEach(program => {
         const container = document.getElementById(program.containerId);
         container.innerHTML = "";
 
-        document.querySelectorAll('.settings input[type="checkbox"]').forEach((checkbox, index) => {
+        document.querySelectorAll('.settings input[type="checkbox"]').forEach(async (checkbox, index) => {
             if (checkbox.checked) {
                 const optionName = document.getElementById(`basicOption${index + 1}Name`).value;
-                const optionId = `${program.prefix}_omit_option_${index + 1}`;
+                const omitId = `${program.prefix}_omit_option_${index + 1}`;
+                const discountId = `${program.prefix}_discount_${index + 1}`;
+                const downId = `${program.prefix}_downpayment_${index + 1}`;
 
                 const optionWrapper = document.createElement('div');
                 optionWrapper.className = "option-container";
@@ -113,16 +177,16 @@ function generateDiscountInputs() {
 
                 const omitCheckbox = document.createElement('input');
                 omitCheckbox.type = "checkbox";
-                omitCheckbox.id = optionId;
-                omitCheckbox.checked = localStorage.getItem(optionId) === null ? true : localStorage.getItem(optionId) === "true";
+                omitCheckbox.id = omitId;
+                omitCheckbox.checked = (await getStoredValue(omitId)) === "false" ? false : true;
 
                 omitCheckbox.addEventListener('change', () => {
-                    localStorage.setItem(optionId, omitCheckbox.checked);
-                    generateDiscountInputs();
+                    setStoredValue(omitId, omitCheckbox.checked);
+                    generateDiscountInputs(); // Re-render UI
                 });
 
                 const omitLabel = document.createElement('label');
-                omitLabel.setAttribute("for", optionId);
+                omitLabel.setAttribute("for", omitId);
 
                 omitContainer.appendChild(omitCheckbox);
                 omitContainer.appendChild(omitLabel);
@@ -130,49 +194,49 @@ function generateDiscountInputs() {
                 const inputContainer = document.createElement('div');
                 inputContainer.className = "input-container";
 
-                const discountLabel = document.createElement('label');
-                discountLabel.innerHTML = index === 0
-                    ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
-                    : `<strong>${optionName}</strong> Discount %`;
-
-                const discountInput = document.createElement('input');
-                discountInput.type = "number";
-                discountInput.id = `${program.prefix}_discount_${index + 1}`;
-                discountInput.value = localStorage.getItem(discountInput.id) || "";
-                discountInput.className = "discount-input";
-                discountInput.min = 0;
-                discountInput.max = 100;
-
-                discountInput.addEventListener('input', () => {
-                    let value = parseFloat(discountInput.value);
-                    value = isNaN(value) ? 0 : Math.max(0, Math.min(100, value));
-                    discountInput.value = value;
-                    localStorage.setItem(discountInput.id, value);
-                });
-
-                const paymentLabel = document.createElement('label');
-                paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
-
-                const paymentInput = document.createElement('input');
-                paymentInput.type = "number";
-                paymentInput.id = `${program.prefix}_downpayment_${index + 1}`;
-                paymentInput.value = localStorage.getItem(paymentInput.id) || "";
-                paymentInput.className = "downpayment-input";
-
                 if (!omitCheckbox.checked) {
-                    // Just show the label with (disabled), no inputs
                     const disabledLabel = document.createElement('p');
                     disabledLabel.innerHTML = `<strong>${optionName}</strong> (disabled)`;
                     disabledLabel.className = "disabled-label";
                     inputContainer.appendChild(disabledLabel);
                 } else {
-                    // Show the actual inputs
+                    const discountLabel = document.createElement('label');
+                    discountLabel.innerHTML = index === 0
+                        ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
+                        : `<strong>${optionName}</strong> Discount %`;
+
+                    const discountInput = document.createElement('input');
+                    discountInput.type = "number";
+                    discountInput.id = discountId;
+                    discountInput.className = "discount-input";
+                    discountInput.min = 0;
+                    discountInput.max = 100;
+                    discountInput.value = await getStoredValue(discountId) || "";
+
+                    discountInput.addEventListener('input', () => {
+                        const value = Math.min(100, Math.max(0, parseFloat(discountInput.value) || 0));
+                        discountInput.value = value;
+                        setStoredValue(discountId, value);
+                    });
+
+                    const paymentLabel = document.createElement('label');
+                    paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
+
+                    const paymentInput = document.createElement('input');
+                    paymentInput.type = "number";
+                    paymentInput.id = downId;
+                    paymentInput.className = "downpayment-input";
+                    paymentInput.value = await getStoredValue(downId) || "";
+
+                    paymentInput.addEventListener('input', () => {
+                        setStoredValue(downId, paymentInput.value);
+                    });
+
                     inputContainer.appendChild(discountLabel);
                     inputContainer.appendChild(discountInput);
                     inputContainer.appendChild(paymentLabel);
                     inputContainer.appendChild(paymentInput);
                 }
-
 
                 optionWrapper.appendChild(omitContainer);
                 optionWrapper.appendChild(inputContainer);
@@ -181,16 +245,11 @@ function generateDiscountInputs() {
                 const separator = document.createElement('hr');
                 separator.className = "option-separator";
                 container.appendChild(separator);
-
-                [discountInput, paymentInput].forEach(input => {
-                    input.addEventListener('input', () => {
-                        localStorage.setItem(input.id, input.value);
-                    });
-                });
             }
         });
     });
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSettings();
