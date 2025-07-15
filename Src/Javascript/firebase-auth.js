@@ -28,9 +28,12 @@ document.getElementById('signup')?.addEventListener('click', () => {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
 
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(() => alert('Account created!'))
-    .catch(err => alert('Signup error: ' + err.message));
+auth.signInWithEmailAndPassword(email, password)
+  .then(() => {
+    window.location.href = 'index.html'; // change path if needed
+  })
+  .catch(err => alert('Login error: ' + err.message));
+
 });
 
 // Logout
