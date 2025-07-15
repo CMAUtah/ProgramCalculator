@@ -21,17 +21,32 @@ window.onload = function() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Global settings loaded.");
 
-    let savedSettings;
-    try {
-        savedSettings = JSON.parse(localStorage.getItem('calculatorSettings')) || { options: [], names: [], values: [] };
-    } catch (error) {
-        console.error("Error parsing saved settings:", error);
-        savedSettings = { options: [], names: [], values: [] };
-    }
+    const user = firebase.auth().currentUser;
 
-    // Apply general settings after loading
-    applyGeneralSettings(savedSettings);
+    if (user) {
+        db.collection("userSettings").doc(user.uid).get().then(doc => {
+            if (doc.exists) {
+                const settings = doc.data();
+                applyGeneralSettings(settings);
+            } else {
+                console.log("No settings found in Firestore for this user.");
+            }
+        }).catch(error => {
+            console.error("Error fetching user settings from Firestore:", error);
+        });
+    } else {
+        // fallback to localStorage
+        let savedSettings;
+        try {
+            savedSettings = JSON.parse(localStorage.getItem('calculatorSettings')) || { options: [], names: [], values: [] };
+        } catch (error) {
+            console.error("Error parsing localStorage settings:", error);
+            savedSettings = { options: [], names: [], values: [] };
+        }
+        applyGeneralSettings(savedSettings);
+    }
 });
+
 
 // Apply general checkbox, text, and number settings
 function applyGeneralSettings(settings) {
