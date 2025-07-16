@@ -9,302 +9,302 @@
     <link rel="icon" type="image/x-icon" href="./images/beltFavicon.png">
 </head>
 <body>
-    <div id="app" style="display: none;">
-    <header>
-        <!-- Hamburger Icon -->
-        <div class="hamburger-menu">☰</div>
-    
-        <!-- Navigation Menu -->
-        <ul class="navbar">
-            <li><a href="index.html" class="nav-link">Home</a></li>
-            <li><a href="basic.html" class="nav-link">Basic</a></li>
-            <li><a href="bbc.html" class="nav-link">BBC</a></li>
-            <li><a href="mc.html" class="nav-link">MC</a></li>
-            <li><a href="legacy.html" class="nav-link">Legacy</a></li>
-            <li><a href="more.html">More</a></li>
-            <li class="settings-link"><a href="settings.html" class="nav-link active">Settings ⚙</a></li>
-        </ul>
-        <span id="savedMessage">Saved!</span>
-        <h1 style="background-color: rgb(252, 177, 15); color: black;">
-            Settings
-        </h1>
-        <ul class="subNav">
-            <li><button class="subNav-button" data-target="section1">Pricing</button></li>
-            <li><button class="subNav-button" data-target="section2">Holiday Event</button></li>
-            <li><button class="subNav-button" data-target="section3">...</button></li>
-        </ul>
-        <h3>This does absolutely nothing at the moment and is still under construction.</h3>
-    </header>
-
-    <div id="section1" class="content-section">
-        <div class="container settings">
-            <h3>Calculator Option Settings</h3>
-            <p><u>Shown options and names</u></p>
-            <label>
-                <input type="checkbox" id="option1Enabled" checked> Enable Option 1  (Paid In Full)
-            </label>
-            <label>
-                -- Name: <input type="text" id="basicOption1Name" value="Option A">
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" id="option2Enabled" checked> Enable Option 2
-            </label>
-            <label>
-                -- Name: <input type="text" id="basicOption2Name" value="Option A-">
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" id="option3Enabled" checked> Enable Option 3
-            </label>
-            <label>
-                -- Name: <input type="text" id="basicOption3Name" value="Option B+">
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" id="option4Enabled" checked> Enable Option 4
-            </label>
-            <label>
-                -- Name: <input type="text" id="basicOption4Name" value="Option B">
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" id="option5Enabled" checked> Enable Option 5
-            </label>
-            <label>
-                -- Name: <input type="text" id="basicOption5Name" value="Option C">
-            </label>
-            <br>
-            <label>
-                <input type="checkbox" id="option6Enabled" checked> Enable Option 6
-            </label>
-            <label>
-                -- Name: <input type="text" id="basicOption6Name" value="Option D">
-            </label>
-        </div>
+    <div id="app" style="display:none">
+        <header>
+            <!-- Hamburger Icon -->
+            <div class="hamburger-menu">☰</div>
         
-        <div class="buttonContainer">
-            <button onclick="saveSettings()">Save Settings</button>
-            <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+            <!-- Navigation Menu -->
+            <ul class="navbar">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="basic.html" class="nav-link">Basic</a></li>
+                <li><a href="bbc.html" class="nav-link">BBC</a></li>
+                <li><a href="mc.html" class="nav-link">MC</a></li>
+                <li><a href="legacy.html" class="nav-link">Legacy</a></li>
+                <li><a href="more.html">More</a></li>
+                <li class="settings-link"><a href="settings.html" class="nav-link active">Settings ⚙</a></li>
+            </ul>
+            <span id="savedMessage">Saved!</span>
+            <h1 style="background-color: rgb(252, 177, 15); color: black;">
+                Settings
+            </h1>
+            <ul class="subNav">
+                <li><button class="subNav-button" data-target="section1">Pricing</button></li>
+                <li><button class="subNav-button" data-target="section2">Holiday Event</button></li>
+                <li><button class="subNav-button" data-target="section3">...</button></li>
+            </ul>
+            <h3>This does absolutely nothing at the moment and is still under construction.</h3>
+        </header>
+
+        <div id="section1" class="content-section">
+            <div class="container settings">
+                <h3>Calculator Option Settings</h3>
+                <p><u>Shown options and names</u></p>
+                <label>
+                    <input type="checkbox" id="option1Enabled" checked> Enable Option 1  (Paid In Full)
+                </label>
+                <label>
+                    -- Name: <input type="text" id="basicOption1Name" value="Option A">
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" id="option2Enabled" checked> Enable Option 2
+                </label>
+                <label>
+                    -- Name: <input type="text" id="basicOption2Name" value="Option A-">
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" id="option3Enabled" checked> Enable Option 3
+                </label>
+                <label>
+                    -- Name: <input type="text" id="basicOption3Name" value="Option B+">
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" id="option4Enabled" checked> Enable Option 4
+                </label>
+                <label>
+                    -- Name: <input type="text" id="basicOption4Name" value="Option B">
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" id="option5Enabled" checked> Enable Option 5
+                </label>
+                <label>
+                    -- Name: <input type="text" id="basicOption5Name" value="Option C">
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" id="option6Enabled" checked> Enable Option 6
+                </label>
+                <label>
+                    -- Name: <input type="text" id="basicOption6Name" value="Option D">
+                </label>
+            </div>
+            
+            <div class="buttonContainer">
+                <button onclick="saveSettings()">Save Settings</button>
+                <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+            </div>
+
+            <!-- Basic Program -->
+            <div class="container">
+                <h3>Basic Program</h3>
+                <label>Base Program Length (months):<input type="number" id="bProgramLength" value="12" min="1"></label><br>
+                <label>Base Monthly Payment:<input type="number" id="bBaseMonthlyPayment" value="169" min="0"></label><br>
+                <label>Base Down Payment:<input type="number" id="bBaseDownPayment" value="199"></label><br>
+                <p>Total Basic Program Value: <span id="bTotalProgramValue"></span></p>
+                <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+                <div id="basicDiscountsContainer"></div>
+            </div>
+            <div class="buttonContainer">
+                <button onclick="saveSettings()">Save Settings</button>
+                <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+            </div>
+
+            <!-- Black Belt Club -->
+            <div class="container" style="background-color: lightgray;">
+                <h3>Black Belt Club</h3>
+                <label>Base Program Length (months):<input type="number" id="bbcProgramLength" value="36" min="1"></label><br>
+                <label>Base Monthly Payment:<input type="number" id="bbcBaseMonthlyPayment" value="194" min="0"></label><br>
+                <label>Base Down Payment:<input type="number" id="bbcBaseDownPayment" value="249"></label><br>
+                <p>Total BBC Program Value: <span id="bbcTotalProgramValue"></span></p>
+                <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+                <div id="bbcDiscountsContainer"></div>
+            </div>
+            <div class="buttonContainer">
+                <button onclick="saveSettings()">Save Settings</button>
+                <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+            </div>
+
+            <!-- Masters Club -->
+            <div class="container" style="background-color: rgb(231, 145, 145);">
+                <h3>Masters Club</h3>
+                <label>Base Program Length (months):<input type="number" id="mcProgramLength" value="36" min="1"></label><br>
+                <label>Base Monthly Payment:<input type="number" id="mcBaseMonthlyPayment" value="219"></label><br>
+                <label>Base Down Payment:<input type="number" id="mcBaseDownPayment" value="299"></label><br>
+                <p>Total MC Program Value: <span id="mcTotalProgramValue"></span></p>
+                <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+                <div id="mcDiscountsContainer"></div>
+            </div>
+
+
+            <div class="buttonContainer">
+                <button onclick="saveSettings()">Save Settings</button>
+            </div>
         </div>
+        <!-- ---------------------------------------------------------------------------------------------- -->
+        <div id="section2" class="content-section hidden">
+            <div class="container">
+                <h3>Basic Holiday Sale
+                    <span class="tooltip-container"><span class="tooltip-icon mcTip">?</span><span class="tooltip-text">
+                        <span style="color: lightskyblue;">Program</span> options will subtract program credit from total & <span style="color: lightskyblue;">Extension</span> options will not.
+                    </span></span>
+                </h3>
+                <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
 
-        <!-- Basic Program -->
-        <div class="container">
-            <h3>Basic Program</h3>
-            <label>Base Program Length (months):<input type="number" id="bProgramLength" value="12" min="1"></label><br>
-            <label>Base Monthly Payment:<input type="number" id="bBaseMonthlyPayment" value="169" min="0"></label><br>
-            <label>Base Down Payment:<input type="number" id="bBaseDownPayment" value="199"></label><br>
-            <p>Total Basic Program Value: <span id="bTotalProgramValue"></span></p>
-            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-            <div id="basicDiscountsContainer"></div>
+                <div class="percent-container">
+                    <input type="number" id="settingsBasicHolidayDiscount" class="percent-input" value="25" min="0" max="100">
+                </div> Discount
+                
+                <!-- Option 1 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsBasicHolidayOption1" checked>
+                    <input id="settingsBasicHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 2 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsBasicHolidayOption2" checked>
+                    <input id="settingsBasicHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 3 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsBasicHolidayOption3" checked>
+                    <input id="settingsBasicHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 4 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsBasicHolidayOption4" checked>
+                    <input id="settingsBasicHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                <br>
+                
+                <!-- Option 1 (extension) -->
+                <div>
+                    <input type="checkbox" id="settingsBasicHolidayExtension1">
+                    <input id="settingsBasicHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
+                </div>
+                
+                <!-- Option 2 (extension) -->
+                <div>
+                    <input type="checkbox" id="settingsBasicHolidayExtension2">
+                    <input id="settingsBasicHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
+                </div>
+                
+                </div>
+            <div class="buttonContainer">
+                <button onclick="saveSettings()">Save Settings</button>
+            </div>
+            <div class="container" style="background-color: lightgray;">
+                <h3>Black Belt Club Holiday Sale
+                    <span class="tooltip-container"><span class="tooltip-icon mcTip">?</span><span class="tooltip-text">
+                        <span style="color: lightskyblue;">Program</span> options will subtract program credit from total & <span style="color: lightskyblue;">Extension</span> options will not.
+                    </span></span>
+                </h3>
+                <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+
+                <div class="percent-container">
+                    <input type="number" id="settingsBBCHolidayDiscount" class="percent-input" value="25" min="0" max="100">
+                </div> Discount
+                
+                <!-- Option 1 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsBBCHolidayOption1" checked>
+                    <input id="settingsBBCHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 2 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsBBCHolidayOption2">
+                    <input id="settingsBBCHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 3 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsBBCHolidayOption3">
+                    <input id="settingsBBCHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 4 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsBBCasicHolidayOption4">
+                    <input id="settingsBBCHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                <br>
+                
+                <!-- Option 1 (extension) -->
+                <div>
+                    <input type="checkbox" id="settingsBBCHolidayExtension1" checked>
+                    <input id="settingsBBCHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
+                </div>
+                
+                <!-- Option 2 (extension) -->
+                <div>
+                    <input type="checkbox" id="settingsBBCHolidayExtension2" checked>
+                    <input id="settingsBBCHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
+                </div>
+
+                </div>
+            <div class="buttonContainer">
+                <button onclick="saveSettings()">Save Settings</button>
+            </div>
+            <div class="container" style="background-color: rgb(231, 145, 145);">
+                <h3>Masters Club Holiday Sale
+                    <span class="tooltip-container"><span class="tooltip-icon mcTip">?</span><span class="tooltip-text">
+                        <span style="color: lightskyblue;">Program</span> options will subtract program credit from total & <span style="color: lightskyblue;">Extension</span> options will not.
+                    </span></span>
+                </h3>
+                <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
+
+                <div class="percent-container">
+                    <input type="number" id="settingsMCHolidayDiscount" class="percent-input" value="25" min="0" max="100">
+                </div> Discount
+                
+                <!-- Option 1 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsMCHolidayOption1" checked>
+                    <input id="settingsMCHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 2 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsMCHolidayOption2">
+                    <input id="settingsMCHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 3 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsMCHolidayOption3">
+                    <input id="settingsMCHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                
+                <!-- Option 4 (program) -->
+                <div>
+                    <input type="checkbox" id="settingsMCasicHolidayOption4">
+                    <input id="settingsMCHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
+                </div>
+                <br>
+                
+                <!-- Option 1 (extension) -->
+                <div>
+                    <input type="checkbox" id="settingsMCHolidayExtension1" checked>
+                    <input id="settingsMCHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
+                </div>
+                
+                <!-- Option 2 (extension) -->
+                <div>
+                    <input type="checkbox" id="settingsMCHolidayExtension2" checked>
+                    <input id="settingsMCHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
+                </div>
+
+                </div>
+            <div class="buttonContainer">
+                <button onclick="saveSettings()">Save Settings</button>
+            </div>
         </div>
-        <div class="buttonContainer">
-            <button onclick="saveSettings()">Save Settings</button>
-            <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
+        <!-- ---------------------------------------------------------------------------------------------- -->
+        <div id="section3" class="content-section hidden">
+            ???
         </div>
+    
 
-        <!-- Black Belt Club -->
-        <div class="container" style="background-color: lightgray;">
-            <h3>Black Belt Club</h3>
-            <label>Base Program Length (months):<input type="number" id="bbcProgramLength" value="36" min="1"></label><br>
-            <label>Base Monthly Payment:<input type="number" id="bbcBaseMonthlyPayment" value="194" min="0"></label><br>
-            <label>Base Down Payment:<input type="number" id="bbcBaseDownPayment" value="249"></label><br>
-            <p>Total BBC Program Value: <span id="bbcTotalProgramValue"></span></p>
-            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-            <div id="bbcDiscountsContainer"></div>
-        </div>
-        <div class="buttonContainer">
-            <button onclick="saveSettings()">Save Settings</button>
-            <span id="savedMessage" style="margin-left: 15px; opacity: 0; color: green;">Saved!</span>
-        </div>
-
-        <!-- Masters Club -->
-        <div class="container" style="background-color: rgb(231, 145, 145);">
-            <h3>Masters Club</h3>
-            <label>Base Program Length (months):<input type="number" id="mcProgramLength" value="36" min="1"></label><br>
-            <label>Base Monthly Payment:<input type="number" id="mcBaseMonthlyPayment" value="219"></label><br>
-            <label>Base Down Payment:<input type="number" id="mcBaseDownPayment" value="299"></label><br>
-            <p>Total MC Program Value: <span id="mcTotalProgramValue"></span></p>
-            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-            <div id="mcDiscountsContainer"></div>
-        </div>
-
-
-        <div class="buttonContainer">
-            <button onclick="saveSettings()">Save Settings</button>
-        </div>
-    </div>
-    <!-- ---------------------------------------------------------------------------------------------- -->
-    <div id="section2" class="content-section hidden">
-        <div class="container">
-            <h3>Basic Holiday Sale
-                <span class="tooltip-container"><span class="tooltip-icon mcTip">?</span><span class="tooltip-text">
-                    <span style="color: lightskyblue;">Program</span> options will subtract program credit from total & <span style="color: lightskyblue;">Extension</span> options will not.
-                </span></span>
-            </h3>
-            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-
-            <div class="percent-container">
-                <input type="number" id="settingsBasicHolidayDiscount" class="percent-input" value="25" min="0" max="100">
-            </div> Discount
-            
-            <!-- Option 1 (program) -->
-            <div>
-                <input type="checkbox" id="settingsBasicHolidayOption1" checked>
-                <input id="settingsBasicHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 2 (program) -->
-            <div>
-                <input type="checkbox" id="settingsBasicHolidayOption2" checked>
-                <input id="settingsBasicHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 3 (program) -->
-            <div>
-                <input type="checkbox" id="settingsBasicHolidayOption3" checked>
-                <input id="settingsBasicHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 4 (program) -->
-            <div>
-                <input type="checkbox" id="settingsBasicHolidayOption4" checked>
-                <input id="settingsBasicHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            <br>
-            
-            <!-- Option 1 (extension) -->
-            <div>
-                <input type="checkbox" id="settingsBasicHolidayExtension1">
-                <input id="settingsBasicHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
-            </div>
-            
-            <!-- Option 2 (extension) -->
-            <div>
-                <input type="checkbox" id="settingsBasicHolidayExtension2">
-                <input id="settingsBasicHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
-            </div>
-            
-            </div>
-        <div class="buttonContainer">
-            <button onclick="saveSettings()">Save Settings</button>
-        </div>
-        <div class="container" style="background-color: lightgray;">
-            <h3>Black Belt Club Holiday Sale
-                <span class="tooltip-container"><span class="tooltip-icon mcTip">?</span><span class="tooltip-text">
-                    <span style="color: lightskyblue;">Program</span> options will subtract program credit from total & <span style="color: lightskyblue;">Extension</span> options will not.
-                </span></span>
-            </h3>
-            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-
-            <div class="percent-container">
-                <input type="number" id="settingsBBCHolidayDiscount" class="percent-input" value="25" min="0" max="100">
-            </div> Discount
-            
-            <!-- Option 1 (program) -->
-            <div>
-                <input type="checkbox" id="settingsBBCHolidayOption1" checked>
-                <input id="settingsBBCHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 2 (program) -->
-            <div>
-                <input type="checkbox" id="settingsBBCHolidayOption2">
-                <input id="settingsBBCHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 3 (program) -->
-            <div>
-                <input type="checkbox" id="settingsBBCHolidayOption3">
-                <input id="settingsBBCHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 4 (program) -->
-            <div>
-                <input type="checkbox" id="settingsBBCasicHolidayOption4">
-                <input id="settingsBBCHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            <br>
-            
-            <!-- Option 1 (extension) -->
-            <div>
-                <input type="checkbox" id="settingsBBCHolidayExtension1" checked>
-                <input id="settingsBBCHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
-            </div>
-            
-            <!-- Option 2 (extension) -->
-            <div>
-                <input type="checkbox" id="settingsBBCHolidayExtension2" checked>
-                <input id="settingsBBCHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
-            </div>
-
-            </div>
-        <div class="buttonContainer">
-            <button onclick="saveSettings()">Save Settings</button>
-        </div>
-        <div class="container" style="background-color: rgb(231, 145, 145);">
-            <h3>Masters Club Holiday Sale
-                <span class="tooltip-container"><span class="tooltip-icon mcTip">?</span><span class="tooltip-text">
-                    <span style="color: lightskyblue;">Program</span> options will subtract program credit from total & <span style="color: lightskyblue;">Extension</span> options will not.
-                </span></span>
-            </h3>
-            <p class="box-info">Unchecking a box below will hide that payment option on its main page for this specific program.</p>
-
-            <div class="percent-container">
-                <input type="number" id="settingsMCHolidayDiscount" class="percent-input" value="25" min="0" max="100">
-            </div> Discount
-            
-            <!-- Option 1 (program) -->
-            <div>
-                <input type="checkbox" id="settingsMCHolidayOption1" checked>
-                <input id="settingsMCHolidayOption1Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 2 (program) -->
-            <div>
-                <input type="checkbox" id="settingsMCHolidayOption2">
-                <input id="settingsMCHolidayOption2Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 3 (program) -->
-            <div>
-                <input type="checkbox" id="settingsMCHolidayOption3">
-                <input id="settingsMCHolidayOption3Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            
-            <!-- Option 4 (program) -->
-            <div>
-                <input type="checkbox" id="settingsMCasicHolidayOption4">
-                <input id="settingsMCHolidayOption4Months" class="discountInput" type="number" min="0"> Month Program
-            </div>
-            <br>
-            
-            <!-- Option 1 (extension) -->
-            <div>
-                <input type="checkbox" id="settingsMCHolidayExtension1" checked>
-                <input id="settingsMCHolidayExtension1Months" class="discountInput" type="number" value="18" min="0"> Month Extension
-            </div>
-            
-            <!-- Option 2 (extension) -->
-            <div>
-                <input type="checkbox" id="settingsMCHolidayExtension2" checked>
-                <input id="settingsMCHolidayExtension2Months" type="number" value="24" min="0"> Month Extension
-            </div>
-
-            </div>
-        <div class="buttonContainer">
-            <button onclick="saveSettings()">Save Settings</button>
-        </div>
-    </div>
-    <!-- ---------------------------------------------------------------------------------------------- -->
-    <div id="section3" class="content-section hidden">
-        ???
-    </div>
-   
-
-    <footer>
-        <p>&copy; 2023 All Rights Reserved</p>
-    </footer>
+        <footer>
+            <p>&copy; 2023 All Rights Reserved</p>
+        </footer>
     </div>
     <script src="Javascript/global.js"></script>
 
@@ -316,6 +316,6 @@
     <!-- Your Firebase auth logic -->
     <script src="Javascript/firebase-auth.js"></script>
 
-        <script src="Javascript/settings.js"></script>
+    <script src="Javascript/settings.js"></script>
 </body>
 </html>
