@@ -143,7 +143,7 @@ function loadSettings(reloadSection2 = false) {
 
 function generateDiscountInputs() {
   const user = firebase.auth().currentUser;
-  const useFirestore = !!user;
+  const useFirestore = !!user && navigator.onLine;
 
   const programs = [
     { containerId: 'basicDiscountsContainer', prefix: 'basic' },
@@ -157,7 +157,7 @@ function generateDiscountInputs() {
       const doc = await db.collection("userSettings").doc(user.uid).get();
       return doc.exists ? doc.data()?.firestoreValues?.[key] : null;
     } catch (err) {
-      console.error("Firestore read error:", err);
+      console.warn(`Firestore read error for key "${key}":`, err);
       return null;
     }
   };
@@ -168,7 +168,9 @@ function generateDiscountInputs() {
     } else {
       db.collection("userSettings").doc(user.uid).set({
         firestoreValues: { [key]: value }
-      }, { merge: true });
+      }, { merge: true }).catch(err => {
+        console.warn(`Firestore write error for key "${key}":`, err);
+      });
     }
   };
 
@@ -195,7 +197,7 @@ function generateDiscountInputs() {
       omitCheckbox.checked = (await getStoredValue(omitId)) !== "false";
       omitCheckbox.addEventListener('change', () => {
         setStoredValue(omitId, omitCheckbox.checked);
-        generateDiscountInputs();
+        generateDiscountInputs(); // Rebuild after change
       });
 
       const omitLabel = document.createElement('label');
@@ -262,13 +264,13 @@ function generateDiscountInputs() {
   });
 }
 
-// 🔐 Only show app after user is authenticated
+// Only show app after user is authenticated
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
   if (app) app.style.display = 'none';
 
   auth.onAuthStateChanged((user) => {
-    if (!user) {
+    if (user) {
       window.location.href = 'login.html';
       return;
     }
