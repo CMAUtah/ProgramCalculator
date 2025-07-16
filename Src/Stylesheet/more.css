@@ -7,6 +7,15 @@ body {
     overflow-x: hidden;
 }
 
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+
 /* Decrease  main margin on smaller screens for more visibility */
 @media screen and (max-width: 768px) {
     body{
@@ -40,6 +49,9 @@ span {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+.content-section { display: none; }
+.content-section.active { display: block; }
 
 
 /* Input field styles */
@@ -218,3 +230,4 @@ button:active {
     color: #888;
     margin-bottom: 0.5em;
 }
+
