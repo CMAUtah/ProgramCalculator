@@ -3,15 +3,24 @@ const firebaseConfig = {
   apiKey: "AIzaSyDQoaoxyfEfBM1UKlxUh-K4RXqA74HBbT0",
   authDomain: "smartbelt-calculator.firebaseapp.com",
   projectId: "smartbelt-calculator",
-  storageBucket: "smartbelt-calculator.firebasestorage.app",
+  storageBucket: "smartbelt-calculator.appspot.com",
   messagingSenderId: "727785940721",
   appId: "1:727785940721:web:0ee546333ef4936f0eab50",
   measurementId: "G-KDC6625JCQ"
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+function showMessage(text, isError = true) {
+  const msgEl = document.getElementById('message');
+  if (msgEl) {
+    msgEl.textContent = text;
+    msgEl.style.color = isError ? 'red' : 'green';
+  }
+}
 
 // Login
 document.getElementById('login')?.addEventListener('click', () => {
@@ -19,8 +28,11 @@ document.getElementById('login')?.addEventListener('click', () => {
   const password = document.getElementById('password').value;
 
   auth.signInWithEmailAndPassword(email, password)
-    .then(() => alert('Logged in!'))
-    .catch(err => alert('Login error: ' + err.message));
+    .then(() => {
+      showMessage('Logged in!', false);
+      setTimeout(() => window.location.href = 'index.html', 1000);
+    })
+    .catch(err => showMessage('Login error: ' + err.message));
 });
 
 // Signup
@@ -30,28 +42,31 @@ document.getElementById('signup')?.addEventListener('click', () => {
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(() => {
-      alert('Account created!');
-      window.location.href = 'index.html'; // change path if needed
+      showMessage('Account created!', false);
+      setTimeout(() => window.location.href = 'index.html', 1000);
     })
-    .catch(err => alert('Signup error: ' + err.message));
+    .catch(err => showMessage('Signup error: ' + err.message));
 });
-
 
 // Logout
 document.getElementById('logout')?.addEventListener('click', () => {
-  auth.signOut().then(() => alert('Logged out!'));
+  auth.signOut()
+    .then(() => {
+      showMessage('Logged out!', false);
+      setTimeout(() => window.location.href = 'login.html', 1000);
+    });
 });
 
-// Toggle UI
-auth.onAuthStateChanged((user) => {
-  const isLoggedIn = !!user;
-  document.getElementById('logout')?.style?.setProperty('display', isLoggedIn ? 'inline-block' : 'none');
-  document.getElementById('login')?.style?.setProperty('display', isLoggedIn ? 'none' : 'inline-block');
-  document.getElementById('signup')?.style?.setProperty('display', isLoggedIn ? 'none' : 'inline-block');
 
-  if (isLoggedIn) {
-    console.log("User logged in:", user.email);
-  } else {
-    console.log("No user logged in");
-  }
-});
+// Toggle UI on login.html only
+if (window.location.pathname.includes('login')) {
+  auth.onAuthStateChanged((user) => {
+    const isLoggedIn = !!user;
+    document.getElementById('logout')?.style?.setProperty('display', isLoggedIn ? 'inline-block' : 'none');
+    document.getElementById('login')?.style?.setProperty('display', isLoggedIn ? 'none' : 'inline-block');
+    document.getElementById('signup')?.style?.setProperty('display', isLoggedIn ? 'none' : 'inline-block');
+
+    console.log(isLoggedIn ? `User logged in: ${user.email}` : 'No user logged in');
+  });
+}
+
