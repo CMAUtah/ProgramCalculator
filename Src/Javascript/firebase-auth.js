@@ -28,13 +28,14 @@ document.getElementById('signup')?.addEventListener('click', () => {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
 
-auth.signInWithEmailAndPassword(email, password)
-  .then(() => {
-    window.location.href = 'index.html'; // change path if needed
-  })
-  .catch(err => alert('Login error: ' + err.message));
-
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      alert('Account created!');
+      window.location.href = 'index.html'; // change path if needed
+    })
+    .catch(err => alert('Signup error: ' + err.message));
 });
+
 
 // Logout
 document.getElementById('logout')?.addEventListener('click', () => {
