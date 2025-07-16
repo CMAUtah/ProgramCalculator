@@ -1,25 +1,67 @@
+// Firebase Auth Check — block access if not logged in
 auth.onAuthStateChanged((user) => {
   if (!user) {
-    // Not logged in, redirect to login
     window.location.href = 'login.html';
+    return;
   }
+
+  initSettingsPage();
 });
 
+function initSettingsPage() {
+  loadSettings();
+
+  if (document.getElementById('bTotalProgramValue')) {
+    calculateProgramValues();
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+      input.addEventListener('input', calculateProgramValues);
+    });
+  }
+
+  // Toggle sections
+  const buttons = document.querySelectorAll(".subNav-button");
+  const sections = document.querySelectorAll(".content-section");
+
+  const defaultSection = document.getElementById("section1");
+  const defaultButton = document.querySelector('[data-target="section1"]');
+
+  if (defaultSection && defaultButton) {
+    defaultSection.classList.add("active");
+    defaultButton.classList.add("active");
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      const target = this.getAttribute("data-target");
+
+      sections.forEach(section => section.classList.remove("active"));
+      document.getElementById(target).classList.add("active");
+
+      buttons.forEach(btn => btn.classList.remove("active"));
+      this.classList.add("active");
+    });
+  });
+
+  // Dynamically update inputs when checkboxes are toggled
+  document.querySelectorAll('.settings input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', generateDiscountInputs);
+  });
+}
 
 function calculateProgramValues() {
-    const programs = [
-        { lengthId: "bProgramLength", paymentId: "bBaseMonthlyPayment", downId: "bBaseDownPayment", totalId: "bTotalProgramValue" },
-        { lengthId: "bbcProgramLength", paymentId: "bbcBaseMonthlyPayment", downId: "bbcBaseDownPayment", totalId: "bbcTotalProgramValue" },
-        { lengthId: "mcProgramLength", paymentId: "mcBaseMonthlyPayment", downId: "mcBaseDownPayment", totalId: "mcTotalProgramValue" }
-    ];
+  const programs = [
+    { lengthId: "bProgramLength", paymentId: "bBaseMonthlyPayment", downId: "bBaseDownPayment", totalId: "bTotalProgramValue" },
+    { lengthId: "bbcProgramLength", paymentId: "bbcBaseMonthlyPayment", downId: "bbcBaseDownPayment", totalId: "bbcTotalProgramValue" },
+    { lengthId: "mcProgramLength", paymentId: "mcBaseMonthlyPayment", downId: "mcBaseDownPayment", totalId: "mcTotalProgramValue" }
+  ];
 
-    programs.forEach(program => {
-        const length = parseFloat(document.getElementById(program.lengthId).value) || 0;
-        const monthlyPayment = parseFloat(document.getElementById(program.paymentId).value) || 0;
-        const downPayment = parseFloat(document.getElementById(program.downId).value) || 0;
-        const totalValue = downPayment + (monthlyPayment * length);
-        document.getElementById(program.totalId).textContent = `$${totalValue.toFixed(2)}`;
-    });
+  programs.forEach(program => {
+    const length = parseFloat(document.getElementById(program.lengthId).value) || 0;
+    const monthlyPayment = parseFloat(document.getElementById(program.paymentId).value) || 0;
+    const downPayment = parseFloat(document.getElementById(program.downId).value) || 0;
+    const totalValue = downPayment + (monthlyPayment * length);
+    document.getElementById(program.totalId).textContent = `$${totalValue.toFixed(2)}`;
+  });
 }
 
 function saveSettings() {
@@ -261,7 +303,6 @@ function generateDiscountInputs() {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSettings();
-    generateDiscountInputs();
 
     if (document.getElementById('bTotalProgramValue')) {
         calculateProgramValues();
