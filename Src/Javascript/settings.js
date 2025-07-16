@@ -1,3 +1,11 @@
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    // Not logged in, redirect to login
+    window.location.href = 'login.html';
+  }
+});
+
+
 function calculateProgramValues() {
     const programs = [
         { lengthId: "bProgramLength", paymentId: "bBaseMonthlyPayment", downId: "bBaseDownPayment", totalId: "bTotalProgramValue" },
