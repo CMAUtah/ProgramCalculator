@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (app) app.style.display = 'none';
 
   auth.onAuthStateChanged((user) => {
-    if (user) {
+    if (!user) {
       window.location.href = 'login.html';
       return;
     }
