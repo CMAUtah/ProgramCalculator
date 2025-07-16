@@ -70,3 +70,16 @@ if (window.location.pathname.includes('login')) {
   });
 }
 
+document.getElementById('resetPasswordLink')?.addEventListener('click', (e) => {
+  e.preventDefault(); // Prevent page reload
+  const email = document.getElementById('email').value.trim();
+
+  if (!email) {
+    showMessage('Please enter your email first.');
+    return;
+  }
+
+  auth.sendPasswordResetEmail(email)
+    .then(() => showMessage('Password reset email sent!', false))
+    .catch(err => showMessage('Reset error: ' + err.message));
+});
