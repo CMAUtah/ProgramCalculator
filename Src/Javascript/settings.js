@@ -1,6 +1,7 @@
 function initSettingsPage() {
   loadSettings();
 
+  // Set up program value calculators
   if (document.getElementById('bTotalProgramValue')) {
     calculateProgramValues();
     document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -8,31 +9,30 @@ function initSettingsPage() {
     });
   }
 
-  // Toggle sections
-  const buttons = document.querySelectorAll(".subNav-button");
-  const sections = document.querySelectorAll(".content-section");
-
+  // Set default visible section
   const defaultSection = document.getElementById("section1");
   const defaultButton = document.querySelector('[data-target="section1"]');
-
   if (defaultSection && defaultButton) {
     defaultSection.classList.add("active");
     defaultButton.classList.add("active");
   }
 
+  // Handle section toggle buttons
+  const buttons = document.querySelectorAll(".subNav-button");
+  const sections = document.querySelectorAll(".content-section");
   buttons.forEach(button => {
     button.addEventListener("click", function () {
       const target = this.getAttribute("data-target");
 
       sections.forEach(section => section.classList.remove("active"));
-      document.getElementById(target).classList.add("active");
+      document.getElementById(target)?.classList.add("active");
 
       buttons.forEach(btn => btn.classList.remove("active"));
       this.classList.add("active");
     });
   });
 
-  // Dynamically update inputs when checkboxes are toggled
+  // Re-render discount inputs when checkboxes are toggled
   document.querySelectorAll('.settings input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', generateDiscountInputs);
   });
@@ -46,12 +46,16 @@ function calculateProgramValues() {
   ];
 
   programs.forEach(program => {
-    const length = parseFloat(document.getElementById(program.lengthId).value) || 0;
-    const monthlyPayment = parseFloat(document.getElementById(program.paymentId).value) || 0;
-    const downPayment = parseFloat(document.getElementById(program.downId).value) || 0;
-    const totalValue = downPayment + (monthlyPayment * length);
-    document.getElementById(program.totalId).textContent = `$${totalValue.toFixed(2)}`;
+    const length = parseFloat(document.getElementById(program.lengthId)?.value) || 0;
+    const monthly = parseFloat(document.getElementById(program.paymentId)?.value) || 0;
+    const down = parseFloat(document.getElementById(program.downId)?.value) || 0;
+    const total = down + monthly * length;
+
+    const output = document.getElementById(program.totalId);
+    if (output) output.textContent = `$${total.toFixed(2)}`;
   });
+  generateDiscountInputs();
+
 }
 
 function saveSettings() {
@@ -71,6 +75,7 @@ function saveSettings() {
     section2Values: {}
   };
 
+  // Save holiday/section2 values separately
   document.querySelectorAll('#section2 input').forEach(input => {
     settings.section2Values[input.id] = input.type === "checkbox" ? input.checked : input.value;
   });
@@ -82,7 +87,8 @@ function saveSettings() {
     return;
   }
 
-  localStorage.setItem('calculatorSettings', JSON.stringify(settings)); // Optional fallback
+  // Save to Firestore (and local as fallback)
+  localStorage.setItem('calculatorSettings', JSON.stringify(settings));
   db.collection("userSettings").doc(user.uid).set(settings)
     .then(() => console.log("Settings saved to Firestore"))
     .catch((err) => console.error("Firestore save failed:", err));
@@ -93,8 +99,46 @@ function saveSettings() {
   if (savedMessage) {
     savedMessage.style.opacity = '1';
     savedMessage.style.transition = 'opacity 0.5s ease-in-out';
-    setTimeout(() => savedMessage.style.opacity = '0', 1500);
+    setTimeout(() => {
+      savedMessage.style.opacity = '0';
+    }, 1500);
   }
+}
+
+function loadSettings(reloadSection2 = false) {
+  const saved = JSON.parse(localStorage.getItem('calculatorSettings'));
+  if (!saved) return;
+
+  if (!reloadSection2) {
+    saved.options?.forEach(setting => {
+      const input = document.getElementById(setting.id);
+      if (input) input.checked = setting.enabled;
+    });
+
+    saved.names?.forEach(setting => {
+      const input = document.getElementById(setting.id);
+      if (input) input.value = setting.value;
+    });
+
+    saved.values?.forEach(setting => {
+      const input = document.getElementById(setting.id);
+      if (input) input.value = setting.value;
+    });
+
+    generateDiscountInputs();
+  }
+
+  // Slight delay ensures #section2 is rendered before loading
+  setTimeout(() => {
+    Object.entries(saved.section2Values || {}).forEach(([id, value]) => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.type === "checkbox" ? input.checked = value : input.value = value;
+      }
+    });
+  }, 100);
+
+  console.log(`Settings ${reloadSection2 ? "for Section 2" : "fully"} loaded`);
 }
 
 function generateDiscountInputs() {
@@ -111,9 +155,9 @@ function generateDiscountInputs() {
     if (!useFirestore) return localStorage.getItem(key);
     try {
       const doc = await db.collection("userSettings").doc(user.uid).get();
-      return doc.exists && doc.data()?.firestoreValues?.[key];
+      return doc.exists ? doc.data()?.firestoreValues?.[key] : null;
     } catch (err) {
-      console.error("Failed to load value from Firestore:", err);
+      console.error("Firestore read error:", err);
       return null;
     }
   };
@@ -130,97 +174,95 @@ function generateDiscountInputs() {
 
   programs.forEach(program => {
     const container = document.getElementById(program.containerId);
+    if (!container) return;
+
     container.innerHTML = "";
 
     document.querySelectorAll('.settings input[type="checkbox"]').forEach(async (checkbox, index) => {
-      if (checkbox.checked) {
-        const optionName = document.getElementById(`basicOption${index + 1}Name`).value;
-        const omitId = `${program.prefix}_omit_option_${index + 1}`;
-        const discountId = `${program.prefix}_discount_${index + 1}`;
-        const downId = `${program.prefix}_downpayment_${index + 1}`;
+      if (!checkbox.checked) return;
 
-        const optionWrapper = document.createElement('div');
-        optionWrapper.className = "option-container";
+      const optionName = document.getElementById(`basicOption${index + 1}Name`)?.value || `Option ${index + 1}`;
+      const omitId = `${program.prefix}_omit_option_${index + 1}`;
+      const discountId = `${program.prefix}_discount_${index + 1}`;
+      const downId = `${program.prefix}_downpayment_${index + 1}`;
 
-        const omitContainer = document.createElement('div');
-        omitContainer.className = "omit-container";
+      const optionWrapper = document.createElement('div');
+      optionWrapper.className = "option-container";
 
-        const omitCheckbox = document.createElement('input');
-        omitCheckbox.type = "checkbox";
-        omitCheckbox.id = omitId;
-        omitCheckbox.checked = (await getStoredValue(omitId)) !== "false";
+      const omitCheckbox = document.createElement('input');
+      omitCheckbox.type = "checkbox";
+      omitCheckbox.id = omitId;
+      omitCheckbox.checked = (await getStoredValue(omitId)) !== "false";
+      omitCheckbox.addEventListener('change', () => {
+        setStoredValue(omitId, omitCheckbox.checked);
+        generateDiscountInputs();
+      });
 
-        omitCheckbox.addEventListener('change', () => {
-          setStoredValue(omitId, omitCheckbox.checked);
-          generateDiscountInputs(); // Re-render UI
+      const omitLabel = document.createElement('label');
+      omitLabel.setAttribute("for", omitId);
+
+      const omitContainer = document.createElement('div');
+      omitContainer.className = "omit-container";
+      omitContainer.appendChild(omitCheckbox);
+      omitContainer.appendChild(omitLabel);
+
+      const inputContainer = document.createElement('div');
+      inputContainer.className = "input-container";
+
+      if (!omitCheckbox.checked) {
+        const disabledLabel = document.createElement('p');
+        disabledLabel.innerHTML = `<strong>${optionName}</strong> (disabled)`;
+        disabledLabel.className = "disabled-label";
+        inputContainer.appendChild(disabledLabel);
+      } else {
+        const discountLabel = document.createElement('label');
+        discountLabel.innerHTML = index === 0
+          ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
+          : `<strong>${optionName}</strong> Discount %`;
+
+        const discountInput = document.createElement('input');
+        discountInput.type = "number";
+        discountInput.id = discountId;
+        discountInput.className = "discount-input";
+        discountInput.min = 0;
+        discountInput.max = 100;
+        discountInput.value = await getStoredValue(discountId) || "";
+        discountInput.addEventListener('input', () => {
+          const value = Math.min(100, Math.max(0, parseFloat(discountInput.value) || 0));
+          discountInput.value = value;
+          setStoredValue(discountId, value);
         });
 
-        const omitLabel = document.createElement('label');
-        omitLabel.setAttribute("for", omitId);
+        const paymentLabel = document.createElement('label');
+        paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
 
-        omitContainer.appendChild(omitCheckbox);
-        omitContainer.appendChild(omitLabel);
+        const paymentInput = document.createElement('input');
+        paymentInput.type = "number";
+        paymentInput.id = downId;
+        paymentInput.className = "downpayment-input";
+        paymentInput.value = await getStoredValue(downId) || "";
+        paymentInput.addEventListener('input', () => {
+          setStoredValue(downId, paymentInput.value);
+        });
 
-        const inputContainer = document.createElement('div');
-        inputContainer.className = "input-container";
-
-        if (!omitCheckbox.checked) {
-          const disabledLabel = document.createElement('p');
-          disabledLabel.innerHTML = `<strong>${optionName}</strong> (disabled)`;
-          disabledLabel.className = "disabled-label";
-          inputContainer.appendChild(disabledLabel);
-        } else {
-          const discountLabel = document.createElement('label');
-          discountLabel.innerHTML = index === 0
-            ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
-            : `<strong>${optionName}</strong> Discount %`;
-
-          const discountInput = document.createElement('input');
-          discountInput.type = "number";
-          discountInput.id = discountId;
-          discountInput.className = "discount-input";
-          discountInput.min = 0;
-          discountInput.max = 100;
-          discountInput.value = await getStoredValue(discountId) || "";
-
-          discountInput.addEventListener('input', () => {
-            const value = Math.min(100, Math.max(0, parseFloat(discountInput.value) || 0));
-            discountInput.value = value;
-            setStoredValue(discountId, value);
-          });
-
-          const paymentLabel = document.createElement('label');
-          paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
-
-          const paymentInput = document.createElement('input');
-          paymentInput.type = "number";
-          paymentInput.id = downId;
-          paymentInput.className = "downpayment-input";
-          paymentInput.value = await getStoredValue(downId) || "";
-
-          paymentInput.addEventListener('input', () => {
-            setStoredValue(downId, paymentInput.value);
-          });
-
-          inputContainer.appendChild(discountLabel);
-          inputContainer.appendChild(discountInput);
-          inputContainer.appendChild(paymentLabel);
-          inputContainer.appendChild(paymentInput);
-        }
-
-        optionWrapper.appendChild(omitContainer);
-        optionWrapper.appendChild(inputContainer);
-        container.appendChild(optionWrapper);
-
-        const separator = document.createElement('hr');
-        separator.className = "option-separator";
-        container.appendChild(separator);
+        inputContainer.appendChild(discountLabel);
+        inputContainer.appendChild(discountInput);
+        inputContainer.appendChild(paymentLabel);
+        inputContainer.appendChild(paymentInput);
       }
+
+      optionWrapper.appendChild(omitContainer);
+      optionWrapper.appendChild(inputContainer);
+      container.appendChild(optionWrapper);
+
+      const separator = document.createElement('hr');
+      separator.className = "option-separator";
+      container.appendChild(separator);
     });
   });
 }
 
-// ✅ FINAL AUTH-LOADED ENTRY POINT
+// 🔐 Only show app after user is authenticated
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
   if (app) app.style.display = 'none';
