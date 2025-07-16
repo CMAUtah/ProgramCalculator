@@ -5,8 +5,10 @@ auth.onAuthStateChanged((user) => {
     return;
   }
 
+  document.getElementById('app').style.display = 'block'; // Show content
   initSettingsPage();
 });
+
 
 function initSettingsPage() {
   loadSettings();
