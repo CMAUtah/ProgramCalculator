@@ -50,8 +50,6 @@ span {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.content-section { display: none; }
-.content-section.active { display: block; }
 
 
 /* Input field styles */
@@ -99,14 +97,6 @@ p {
     padding: 1px;
     margin-top: 1px;
     margin-bottom: 1px;
-}
-
-/* Separator between each section */
-.option-separator {
-    border: 0;
-    height: 2px;
-    background: #ccc; /* Light gray separator */
-    margin-top: 10px;
 }
 
 
