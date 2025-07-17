@@ -1,7 +1,34 @@
+// settings.js
+let storedDiscountValues = {}; // Cache for loaded values
+
 function initSettingsPage() {
   loadSettings();
 
-  // Set up program value calculators
+  // Load stored discount-related values (once)
+  firebase.auth().onAuthStateChanged(async (user) => {
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    if (navigator.onLine) {
+      try {
+        const doc = await db.collection("userSettings").doc(user.uid).get();
+        storedDiscountValues = doc.exists ? doc.data().firestoreValues || {} : {};
+      } catch (err) {
+        console.warn("Failed to load Firestore discount values:", err);
+      }
+    } else {
+      for (let key in localStorage) {
+        if (key.includes("_discount_") || key.includes("_downpayment_") || key.includes("_omit_option_")) {
+          storedDiscountValues[key] = localStorage.getItem(key);
+        }
+      }
+    }
+
+    generateDiscountInputs();
+  });
+
   if (document.getElementById('bTotalProgramValue')) {
     calculateProgramValues();
     document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -9,7 +36,6 @@ function initSettingsPage() {
     });
   }
 
-  // Set default visible section
   const defaultSection = document.getElementById("section1");
   const defaultButton = document.querySelector('[data-target="section1"]');
   if (defaultSection && defaultButton) {
@@ -17,22 +43,16 @@ function initSettingsPage() {
     defaultButton.classList.add("active");
   }
 
-  // Handle section toggle buttons
-  const buttons = document.querySelectorAll(".subNav-button");
-  const sections = document.querySelectorAll(".content-section");
-  buttons.forEach(button => {
+  document.querySelectorAll(".subNav-button").forEach(button => {
     button.addEventListener("click", function () {
       const target = this.getAttribute("data-target");
-
-      sections.forEach(section => section.classList.remove("active"));
+      document.querySelectorAll(".content-section").forEach(section => section.classList.remove("active"));
       document.getElementById(target)?.classList.add("active");
-
-      buttons.forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".subNav-button").forEach(btn => btn.classList.remove("active"));
       this.classList.add("active");
     });
   });
 
-  // Re-render discount inputs when checkboxes are toggled
   document.querySelectorAll('.settings input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', generateDiscountInputs);
   });
@@ -54,8 +74,6 @@ function calculateProgramValues() {
     const output = document.getElementById(program.totalId);
     if (output) output.textContent = `$${total.toFixed(2)}`;
   });
-  generateDiscountInputs();
-
 }
 
 function saveSettings() {
@@ -75,33 +93,39 @@ function saveSettings() {
     section2Values: {}
   };
 
-  // Save holiday/section2 values separately
   document.querySelectorAll('#section2 input').forEach(input => {
     settings.section2Values[input.id] = input.type === "checkbox" ? input.checked : input.value;
+  });
+
+  const firestoreValues = {};
+  document.querySelectorAll('.discount-input, .downpayment-input').forEach(input => {
+    firestoreValues[input.id] = input.value;
+  });
+  document.querySelectorAll('.omit-container input[type="checkbox"]').forEach(input => {
+    firestoreValues[input.id] = input.checked;
   });
 
   const user = firebase.auth().currentUser;
   if (!user) {
     localStorage.setItem('calculatorSettings', JSON.stringify(settings));
+    Object.entries(firestoreValues).forEach(([key, val]) => localStorage.setItem(key, val));
     console.log("Settings saved locally:", settings);
     return;
   }
 
-  // Save to Firestore (and local as fallback)
-  localStorage.setItem('calculatorSettings', JSON.stringify(settings));
-  db.collection("userSettings").doc(user.uid).set(settings)
-    .then(() => console.log("Settings saved to Firestore"))
-    .catch((err) => console.error("Firestore save failed:", err));
-
-  calculateProgramValues();
+  db.collection("userSettings").doc(user.uid).set({
+    ...settings,
+    firestoreValues
+  }, { merge: true }).then(() => {
+    Object.entries(firestoreValues).forEach(([key, val]) => localStorage.setItem(key, val));
+    console.log("Settings saved to Firestore");
+  }).catch(err => console.error("Firestore save failed:", err));
 
   const savedMessage = document.getElementById('savedMessage');
   if (savedMessage) {
     savedMessage.style.opacity = '1';
     savedMessage.style.transition = 'opacity 0.5s ease-in-out';
-    setTimeout(() => {
-      savedMessage.style.opacity = '0';
-    }, 1500);
+    setTimeout(() => savedMessage.style.opacity = '0', 1500);
   }
 }
 
@@ -124,11 +148,8 @@ function loadSettings(reloadSection2 = false) {
       const input = document.getElementById(setting.id);
       if (input) input.value = setting.value;
     });
-
-    generateDiscountInputs();
   }
 
-  // Slight delay ensures #section2 is rendered before loading
   setTimeout(() => {
     Object.entries(saved.section2Values || {}).forEach(([id, value]) => {
       const input = document.getElementById(id);
@@ -137,136 +158,95 @@ function loadSettings(reloadSection2 = false) {
       }
     });
   }, 100);
-
-  console.log(`Settings ${reloadSection2 ? "for Section 2" : "fully"} loaded`);
 }
 
 async function generateDiscountInputs() {
-  const user = firebase.auth().currentUser;
-  const useFirestore = !!user && navigator.onLine;
-
   const programs = [
     { containerId: 'basicDiscountsContainer', prefix: 'basic' },
     { containerId: 'bbcDiscountsContainer', prefix: 'bbc' },
     { containerId: 'mcDiscountsContainer', prefix: 'mc' }
   ];
 
-  const getStoredValue = async (key) => {
-    if (!useFirestore) return localStorage.getItem(key);
-    try {
-      const doc = await db.collection("userSettings").doc(user.uid).get();
-      return doc.exists ? doc.data()?.firestoreValues?.[key] : null;
-    } catch (err) {
-      console.warn(`Firestore read error for key "${key}":`, err);
-      return null;
+  for (const program of programs) {
+    const container = document.getElementById(program.containerId);
+    if (!container) continue;
+
+    container.innerHTML = "";
+    const checkboxes = document.querySelectorAll('.settings input[type="checkbox"]');
+
+    for (let index = 0; index < checkboxes.length; index++) {
+      const checkbox = checkboxes[index];
+      if (!checkbox.checked) continue;
+
+      const optionName = document.getElementById(`${program.prefix}Option${index + 1}Name`)?.value || `Option ${index + 1}`;
+      const omitId = `${program.prefix}_omit_option_${index + 1}`;
+      const discountId = `${program.prefix}_discount_${index + 1}`;
+      const downId = `${program.prefix}_downpayment_${index + 1}`;
+
+      const optionWrapper = document.createElement('div');
+      optionWrapper.className = "option-container";
+
+      const omitCheckbox = document.createElement('input');
+      omitCheckbox.type = "checkbox";
+      omitCheckbox.id = omitId;
+      omitCheckbox.checked = storedDiscountValues[omitId] !== "false";
+
+      const omitLabel = document.createElement('label');
+      omitLabel.setAttribute("for", omitId);
+
+      const omitContainer = document.createElement('div');
+      omitContainer.className = "omit-container";
+      omitContainer.appendChild(omitCheckbox);
+      omitContainer.appendChild(omitLabel);
+
+      const inputContainer = document.createElement('div');
+      inputContainer.className = "input-container";
+
+      if (!omitCheckbox.checked) {
+        const disabledLabel = document.createElement('p');
+        disabledLabel.innerHTML = `<strong>${optionName}</strong> (disabled)`;
+        disabledLabel.className = "disabled-label";
+        inputContainer.appendChild(disabledLabel);
+      } else {
+        const discountLabel = document.createElement('label');
+        discountLabel.innerHTML = index === 0
+          ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
+          : `<strong>${optionName}</strong> Discount %`;
+
+        const discountInput = document.createElement('input');
+        discountInput.type = "number";
+        discountInput.id = discountId;
+        discountInput.className = "discount-input";
+        discountInput.min = 0;
+        discountInput.max = 100;
+        discountInput.value = storedDiscountValues[discountId] || "";
+
+        const paymentLabel = document.createElement('label');
+        paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
+
+        const paymentInput = document.createElement('input');
+        paymentInput.type = "number";
+        paymentInput.id = downId;
+        paymentInput.className = "downpayment-input";
+        paymentInput.value = storedDiscountValues[downId] || "";
+
+        inputContainer.appendChild(discountLabel);
+        inputContainer.appendChild(discountInput);
+        inputContainer.appendChild(paymentLabel);
+        inputContainer.appendChild(paymentInput);
+      }
+
+      optionWrapper.appendChild(omitContainer);
+      optionWrapper.appendChild(inputContainer);
+      container.appendChild(optionWrapper);
+
+      const separator = document.createElement('hr');
+      separator.className = "option-separator";
+      container.appendChild(separator);
     }
-  };
-
-  const setStoredValue = (key, value) => {
-    if (!useFirestore) {
-      localStorage.setItem(key, value);
-    } else {
-      db.collection("userSettings").doc(user.uid).set({
-        firestoreValues: { [key]: value }
-      }, { merge: true }).catch(err => {
-        console.warn(`Firestore write error for key "${key}":`, err);
-      });
-    }
-  };
-
-for (const program of programs) {
-  const container = document.getElementById(program.containerId);
-  if (!container) continue;
-
-  container.innerHTML = "";
-
-  const checkboxes = document.querySelectorAll('.settings input[type="checkbox"]');
-  for (let index = 0; index < checkboxes.length; index++) {
-    const checkbox = checkboxes[index];
-    if (!checkbox.checked) continue;
-
-    const optionName = document.getElementById(`${program.prefix}Option${index + 1}Name`)?.value || `Option ${index + 1}`;
-    const omitId = `${program.prefix}_omit_option_${index + 1}`;
-    const discountId = `${program.prefix}_discount_${index + 1}`;
-    const downId = `${program.prefix}_downpayment_${index + 1}`;
-
-    const optionWrapper = document.createElement('div');
-    optionWrapper.className = "option-container";
-
-    const omitCheckbox = document.createElement('input');
-    omitCheckbox.type = "checkbox";
-    omitCheckbox.id = omitId;
-    omitCheckbox.checked = (await getStoredValue(omitId)) !== "false";
-    omitCheckbox.addEventListener('change', () => {
-      setStoredValue(omitId, omitCheckbox.checked);
-      generateDiscountInputs(); // Rebuild after change
-    });
-
-    const omitLabel = document.createElement('label');
-    omitLabel.setAttribute("for", omitId);
-
-    const omitContainer = document.createElement('div');
-    omitContainer.className = "omit-container";
-    omitContainer.appendChild(omitCheckbox);
-    omitContainer.appendChild(omitLabel);
-
-    const inputContainer = document.createElement('div');
-    inputContainer.className = "input-container";
-
-    if (!omitCheckbox.checked) {
-      const disabledLabel = document.createElement('p');
-      disabledLabel.innerHTML = `<strong>${optionName}</strong> (disabled)`;
-      disabledLabel.className = "disabled-label";
-      inputContainer.appendChild(disabledLabel);
-    } else {
-      const discountLabel = document.createElement('label');
-      discountLabel.innerHTML = index === 0
-        ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
-        : `<strong>${optionName}</strong> Discount %`;
-
-      const discountInput = document.createElement('input');
-      discountInput.type = "number";
-      discountInput.id = discountId;
-      discountInput.className = "discount-input";
-      discountInput.min = 0;
-      discountInput.max = 100;
-      discountInput.value = await getStoredValue(discountId) || "";
-      discountInput.addEventListener('input', () => {
-        const value = Math.min(100, Math.max(0, parseFloat(discountInput.value) || 0));
-        discountInput.value = value;
-        setStoredValue(discountId, value);
-      });
-
-      const paymentLabel = document.createElement('label');
-      paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
-
-      const paymentInput = document.createElement('input');
-      paymentInput.type = "number";
-      paymentInput.id = downId;
-      paymentInput.className = "downpayment-input";
-      paymentInput.value = await getStoredValue(downId) || "";
-      paymentInput.addEventListener('input', () => {
-        setStoredValue(downId, paymentInput.value);
-      });
-
-      inputContainer.appendChild(discountLabel);
-      inputContainer.appendChild(discountInput);
-      inputContainer.appendChild(paymentLabel);
-      inputContainer.appendChild(paymentInput);
-    }
-
-    optionWrapper.appendChild(omitContainer);
-    optionWrapper.appendChild(inputContainer);
-    container.appendChild(optionWrapper);
-
-    const separator = document.createElement('hr');
-    separator.className = "option-separator";
-    container.appendChild(separator);
   }
 }
-}
 
-// 🔐 Only show app after user is authenticated
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
   if (app) app.style.display = 'none';
