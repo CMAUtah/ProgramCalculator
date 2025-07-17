@@ -141,7 +141,7 @@ function loadSettings(reloadSection2 = false) {
   console.log(`Settings ${reloadSection2 ? "for Section 2" : "fully"} loaded`);
 }
 
-function generateDiscountInputs() {
+async function generateDiscountInputs() {
   const user = firebase.auth().currentUser;
   const useFirestore = !!user && navigator.onLine;
 
@@ -174,97 +174,99 @@ function generateDiscountInputs() {
     }
   };
 
-  programs.forEach(program => {
-    const container = document.getElementById(program.containerId);
-    if (!container) return;
+for (const program of programs) {
+  const container = document.getElementById(program.containerId);
+  if (!container) continue;
 
-    container.innerHTML = "";
+  container.innerHTML = "";
 
-    document.querySelectorAll('.settings input[type="checkbox"]').forEach(async (checkbox, index) => {
-      if (!checkbox.checked) return;
+  const checkboxes = document.querySelectorAll('.settings input[type="checkbox"]');
+  for (let index = 0; index < checkboxes.length; index++) {
+    const checkbox = checkboxes[index];
+    if (!checkbox.checked) continue;
 
-      const optionName = document.getElementById(`basicOption${index + 1}Name`)?.value || `Option ${index + 1}`;
-      const omitId = `${program.prefix}_omit_option_${index + 1}`;
-      const discountId = `${program.prefix}_discount_${index + 1}`;
-      const downId = `${program.prefix}_downpayment_${index + 1}`;
+    const optionName = document.getElementById(`${program.prefix}Option${index + 1}Name`)?.value || `Option ${index + 1}`;
+    const omitId = `${program.prefix}_omit_option_${index + 1}`;
+    const discountId = `${program.prefix}_discount_${index + 1}`;
+    const downId = `${program.prefix}_downpayment_${index + 1}`;
 
-      const optionWrapper = document.createElement('div');
-      optionWrapper.className = "option-container";
+    const optionWrapper = document.createElement('div');
+    optionWrapper.className = "option-container";
 
-      const omitCheckbox = document.createElement('input');
-      omitCheckbox.type = "checkbox";
-      omitCheckbox.id = omitId;
-      omitCheckbox.checked = (await getStoredValue(omitId)) !== "false";
-      omitCheckbox.addEventListener('change', () => {
-        setStoredValue(omitId, omitCheckbox.checked);
-        generateDiscountInputs(); // Rebuild after change
+    const omitCheckbox = document.createElement('input');
+    omitCheckbox.type = "checkbox";
+    omitCheckbox.id = omitId;
+    omitCheckbox.checked = (await getStoredValue(omitId)) !== "false";
+    omitCheckbox.addEventListener('change', () => {
+      setStoredValue(omitId, omitCheckbox.checked);
+      generateDiscountInputs(); // Rebuild after change
+    });
+
+    const omitLabel = document.createElement('label');
+    omitLabel.setAttribute("for", omitId);
+
+    const omitContainer = document.createElement('div');
+    omitContainer.className = "omit-container";
+    omitContainer.appendChild(omitCheckbox);
+    omitContainer.appendChild(omitLabel);
+
+    const inputContainer = document.createElement('div');
+    inputContainer.className = "input-container";
+
+    if (!omitCheckbox.checked) {
+      const disabledLabel = document.createElement('p');
+      disabledLabel.innerHTML = `<strong>${optionName}</strong> (disabled)`;
+      disabledLabel.className = "disabled-label";
+      inputContainer.appendChild(disabledLabel);
+    } else {
+      const discountLabel = document.createElement('label');
+      discountLabel.innerHTML = index === 0
+        ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
+        : `<strong>${optionName}</strong> Discount %`;
+
+      const discountInput = document.createElement('input');
+      discountInput.type = "number";
+      discountInput.id = discountId;
+      discountInput.className = "discount-input";
+      discountInput.min = 0;
+      discountInput.max = 100;
+      discountInput.value = await getStoredValue(discountId) || "";
+      discountInput.addEventListener('input', () => {
+        const value = Math.min(100, Math.max(0, parseFloat(discountInput.value) || 0));
+        discountInput.value = value;
+        setStoredValue(discountId, value);
       });
 
-      const omitLabel = document.createElement('label');
-      omitLabel.setAttribute("for", omitId);
+      const paymentLabel = document.createElement('label');
+      paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
 
-      const omitContainer = document.createElement('div');
-      omitContainer.className = "omit-container";
-      omitContainer.appendChild(omitCheckbox);
-      omitContainer.appendChild(omitLabel);
+      const paymentInput = document.createElement('input');
+      paymentInput.type = "number";
+      paymentInput.id = downId;
+      paymentInput.className = "downpayment-input";
+      paymentInput.value = await getStoredValue(downId) || "";
+      paymentInput.addEventListener('input', () => {
+        setStoredValue(downId, paymentInput.value);
+      });
 
-      const inputContainer = document.createElement('div');
-      inputContainer.className = "input-container";
+      inputContainer.appendChild(discountLabel);
+      inputContainer.appendChild(discountInput);
+      inputContainer.appendChild(paymentLabel);
+      inputContainer.appendChild(paymentInput);
+    }
 
-      if (!omitCheckbox.checked) {
-        const disabledLabel = document.createElement('p');
-        disabledLabel.innerHTML = `<strong>${optionName}</strong> (disabled)`;
-        disabledLabel.className = "disabled-label";
-        inputContainer.appendChild(disabledLabel);
-      } else {
-        const discountLabel = document.createElement('label');
-        discountLabel.innerHTML = index === 0
-          ? `<strong>${optionName}</strong> Discount (Paid In Full) %`
-          : `<strong>${optionName}</strong> Discount %`;
+    optionWrapper.appendChild(omitContainer);
+    optionWrapper.appendChild(inputContainer);
+    container.appendChild(optionWrapper);
 
-        const discountInput = document.createElement('input');
-        discountInput.type = "number";
-        discountInput.id = discountId;
-        discountInput.className = "discount-input";
-        discountInput.min = 0;
-        discountInput.max = 100;
-        discountInput.value = await getStoredValue(discountId) || "";
-        discountInput.addEventListener('input', () => {
-          const value = Math.min(100, Math.max(0, parseFloat(discountInput.value) || 0));
-          discountInput.value = value;
-          setStoredValue(discountId, value);
-        });
-
-        const paymentLabel = document.createElement('label');
-        paymentLabel.innerHTML = `<strong>${optionName}</strong> Downpayment`;
-
-        const paymentInput = document.createElement('input');
-        paymentInput.type = "number";
-        paymentInput.id = downId;
-        paymentInput.className = "downpayment-input";
-        paymentInput.value = await getStoredValue(downId) || "";
-        paymentInput.addEventListener('input', () => {
-          setStoredValue(downId, paymentInput.value);
-        });
-
-        inputContainer.appendChild(discountLabel);
-        inputContainer.appendChild(discountInput);
-        inputContainer.appendChild(paymentLabel);
-        inputContainer.appendChild(paymentInput);
-      }
-
-      optionWrapper.appendChild(omitContainer);
-      optionWrapper.appendChild(inputContainer);
-      container.appendChild(optionWrapper);
-
-      const separator = document.createElement('hr');
-      separator.className = "option-separator";
-      container.appendChild(separator);
-    });
-  });
+    const separator = document.createElement('hr');
+    separator.className = "option-separator";
+    container.appendChild(separator);
+  }
+}
 }
 
-// Only show app after user is authenticated
+// 🔐 Only show app after user is authenticated
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
   if (app) app.style.display = 'none';
